@@ -1,12 +1,10 @@
 <script>
-    let totalSum = 0;
-    let currentPage = "home";
-    export let inpValue;
+    
 </script>
 
 <header>
     <div class="header_box">
-        <div class="total_sum">{inpValue} руб</div>
+        <div class="total_sum">100000 руб</div>
         <div class="main_data">
             <div class="main_data_item">
                 <div class="title">Доход</div>
@@ -18,6 +16,7 @@
             </div>
         </div>
     </div>
+    <a href="/categories" class="add_operation_link">+</a>
 </header>
 
 <style lang="scss">
@@ -25,6 +24,7 @@
         background: #aea9f2;
         color: #fff;
         padding: 10px 0 50px;
+        position: relative;
     }
 
     .total_sum{
@@ -52,5 +52,23 @@
     .title{
         font-size: 25px;
     }
+
+    .add_operation_link{
+		display: flex;
+		align-items: center;
+		color: #fff;
+		justify-content: center;
+		font-size: 70px;
+		text-decoration: none;
+		font-weight: bold;
+		position: absolute;
+		width: 100px;
+		height: 100px;
+		border-radius: 50%;
+		background: orange;
+
+		bottom: -50px;
+		left: calc(50% - 50px);
+	}
 
 </style>

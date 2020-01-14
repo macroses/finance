@@ -1,15 +1,16 @@
 <script>
-    let currentPage = "home";
-    let bool = true;
+    export let segment;
 </script>
 
 <style lang="scss">
-    .main_nav{
+    :global(.main_nav){
+        padding: 0;
         display: flex;
         list-style: none;
         align-items: center;
         justify-content: space-around;
         margin-bottom: 20px;
+        margin-top: 0;
         li{
             flex: 1;
             text-align: center;
@@ -22,7 +23,7 @@
             display: block;
             border-bottom: 3px solid transparent;
             padding-bottom: 10px;
-            &.active{
+            &.selected{
                 border-bottom: 3px solid orange;
             }
         }
@@ -31,13 +32,9 @@
 
 <ul class="main_nav">
     <li>
-        <a href="." 
-            class:active={currentPage === "home" ? 'active' : ''}
-            on:click={() => currentPage = "home"}><img src="img/home.svg" alt=""></a>
+        <a href="." class:selected={segment === undefined}><img src="img/home.svg" alt=""></a>
     </li>
     <li>
-        <a href="." 
-            class:active={currentPage === "category" ? 'active' : ''}
-            on:click={() => currentPage = "category"}><img src="img/folder.svg" alt=""></a>
+        <a href="categories" class:selected={segment === 'categories'}><img src="img/folder.svg" alt=""></a>
     </li>
 </ul>
