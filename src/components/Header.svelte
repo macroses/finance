@@ -1,6 +1,12 @@
+<script>
+    let totalSum = 0;
+    let currentPage = "home";
+    export let inpValue;
+</script>
+
 <header>
     <div class="header_box">
-        <div class="total_sum">512000 руб</div>
+        <div class="total_sum">{inpValue} руб</div>
         <div class="main_data">
             <div class="main_data_item">
                 <div class="title">Доход</div>
@@ -18,7 +24,7 @@
     header {
         background: #aea9f2;
         color: #fff;
-        padding: 50px;
+        padding: 10px 0 50px;
     }
 
     .total_sum{
@@ -34,8 +40,12 @@
     }
 
     .main_data_item{
+        font-weight: bold;
         .profit{
             color: green;
+        }
+        .loss{
+            color: red;
         }
     }
 
