@@ -1,17 +1,16 @@
 <script>
 	import Header from '../components/Header.svelte';
 	import Graph from '../components/Graph.svelte';
-
-	function changeClass() {
-		currentPage = "categories";
-	}
+	import TransitionWrapper from '../components/TransitionWrapper.svelte';
 
 </script>
 
-<Header />
-<main>
-	<Graph />
-</main>
+<TransitionWrapper>
+	<Header />
+	<main>
+		<Graph />
+	</main>
+</TransitionWrapper>
 
 
 <style>
@@ -20,7 +19,6 @@
 		padding: 0;
 		box-sizing: border-box;
 	}
-
 	main{
 		position: relative;
 	}
