@@ -13,7 +13,16 @@
     .wrapper{
 		max-width: 768px;
 		margin: 0 auto;
-		border: 1px solid;
 		font-family: 'Roboto Condensed', sans-serif;
 	}
+
+    :global(*) {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :global(ul) {
+        list-style: none;
+    }
 </style>
