@@ -3,45 +3,48 @@
 
     
     let popularCategories = [];
+    let customCategoryName = '';
 
     let store = JSON.parse(localStorage.getItem('arr'));
 
     if(store === null) {
         store = [
             {id: 1, name: 'Транспорт'},
-            {id: 1, name: 'Продукты'},
-            {id: 1, name: 'Здоровье'}
+            {id: 2, name: 'Продукты'},
+            {id: 3, name: 'Здоровье'}
         ];
 
         localStorage.setItem('arr', JSON.stringify(store));
     }
 
     popularCategories = store;
-    
-    let id = popularCategories[popularCategories.length - 1].id;
-    console.log(id)
-
-    let customCategoryName = {
-        name: '',
-        id
-    };
-
-    // console.log(customCategoryName.id)
 
     function addCategory() {
         if(customCategoryName === '') {
             return;
         }
 
-        popularCategories = [...popularCategories, customCategoryName];
-        customCategoryName = '';
+        let elem = popularCategories[popularCategories.length -1];
 
-        console.log(popularCategories);
+        let newObj = {
+            id: elem.id + 1,
+            name: customCategoryName
+        }
+
+        popularCategories = [...popularCategories, newObj];
+        customCategoryName = '';
 
         localStorage.setItem('arr', JSON.stringify(popularCategories));
     }
 
+    function removeCategory(index) {
+        popularCategories = [...popularCategories.slice(0, index), ...popularCategories.slice(index + 1)]
+        localStorage.setItem('arr', JSON.stringify(popularCategories));
+    }
 
+    $: if(popularCategories.length === 0) {
+        // что нибудь добавить, если категории пусты или если остался один элемент массива
+    }
 
 </script>
 
@@ -105,10 +108,11 @@
             <ul>
                 {#each popularCategories as {name}, i}
                     <li>
+                        { i + 1 }
                         { name }
                         <button 
                             class="delete_item_btn"
-                            on:click={() => {}}></button>
+                            on:click={() => removeCategory(i)}></button>
                             
                     </li>
                 {/each}
