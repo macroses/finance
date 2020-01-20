@@ -4,6 +4,7 @@
     
     let popularCategories = [];
     let customCategoryName = '';
+    let visibleInp = false;
 
     let store = JSON.parse(localStorage.getItem('arr'));
 
@@ -26,8 +27,12 @@
 
         let elem = popularCategories[popularCategories.length -1];
 
+        if(elem === undefined) {
+            elem = 1;
+        }
+
         let newObj = {
-            id: elem.id + 1,
+            id: elem.id === undefined ? 1 : elem.id + 1,
             name: customCategoryName
         }
 
@@ -42,8 +47,8 @@
         localStorage.setItem('arr', JSON.stringify(popularCategories));
     }
 
-    $: if(popularCategories.length === 0) {
-        // что нибудь добавить, если категории пусты или если остался один элемент массива
+    function showInput(index) {
+        
     }
 
 </script>
@@ -65,8 +70,15 @@
             &:hover {
                 background-color: #fff;
             }
+            
+        }
+
+        .need_more {
+            pointer-events: none;
         }
     }
+
+
 
     .add_category {
         display: flex;
@@ -100,6 +112,23 @@
         outline: 0;
         cursor: pointer;
     }
+
+    .edit_item_btn{
+        position: absolute;
+        background: url(../img/pen.svg) no-repeat;
+        background-size: contain;
+        display: inline-block;
+        width: 20px;
+        height: 100%;
+        z-index: 2;
+
+        top: 0; right: 30px;
+        border: 0;
+        outline: 0;
+        cursor: pointer;
+    }
+
+    
 </style>
 
 <TransitionWrapper>
@@ -108,13 +137,21 @@
             <ul>
                 {#each popularCategories as {name}, i}
                     <li>
-                        { i + 1 }
+                        <b>{ i + 1 }</b>
                         { name }
+
+                        <button class="edit_item_btn" on:click={() => showInput(i)}></button>
+
+                        {#if visibleInp}
+                            <input type="text" bind:value={name}>
+                        {/if}
+
                         <button 
                             class="delete_item_btn"
                             on:click={() => removeCategory(i)}></button>
-                            
                     </li>
+                {:else} 
+                    <li class="need_more">Добавьте категорию</li>
                 {/each}
             </ul>
 
