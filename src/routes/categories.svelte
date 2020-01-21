@@ -47,8 +47,9 @@
         localStorage.setItem('arr', JSON.stringify(popularCategories));
     }
 
-    function handleSubmit(name, i) {
-        popularCategories[i].name = name;
+    function handleSubmit(idNum, name) {
+        let elem = popularCategories.filter(a => a.id === idNum);
+        elem[0].name = name;
         localStorage.setItem('arr', JSON.stringify(popularCategories));
     }
 
@@ -136,16 +137,16 @@
     <section class="category">
         <div class="categories_list">
             <ul>
-                {#each popularCategories as {name, visible}, i}
+                {#each popularCategories as category, i}
                     <li>
                         <b>{ i + 1 }</b>
-                        { name }
+                        { category.name }
 
-                        <button class="edit_item_btn" on:click={() => visible = true}></button>
+                        <button class="edit_item_btn" on:click={() => category.visible = true}></button>
 
                             <!-- {#if visible} -->
-                                <input type="text" bind:value={name}>
-                                <button type="submit" on:click={() => handleSubmit(name, i)}>submit</button>
+                                <input type="text" bind:value={category.name}>
+                                <button type="submit" on:click={() => handleSubmit(category.id, category.name)}>submit</button>
                             <!-- {/if} -->
 
                         <button 
