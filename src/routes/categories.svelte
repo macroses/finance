@@ -4,15 +4,14 @@
     
     let popularCategories = [];
     let customCategoryName = '';
-    let visibleInp = false;
 
     let store = JSON.parse(localStorage.getItem('arr'));
 
     if(store === null) {
         store = [
-            {id: 1, name: 'Транспорт'},
-            {id: 2, name: 'Продукты'},
-            {id: 3, name: 'Здоровье'}
+            {id: 1, name: 'Транспорт', visible: false},
+            {id: 2, name: 'Продукты', visible: false},
+            {id: 3, name: 'Здоровье', visible: false}
         ];
 
         localStorage.setItem('arr', JSON.stringify(store));
@@ -33,7 +32,8 @@
 
         let newObj = {
             id: elem.id === undefined ? 1 : elem.id + 1,
-            name: customCategoryName
+            name: customCategoryName,
+            visible: false
         }
 
         popularCategories = [...popularCategories, newObj];
@@ -47,8 +47,9 @@
         localStorage.setItem('arr', JSON.stringify(popularCategories));
     }
 
-    function showInput(index) {
-        
+    function handleSubmit(name, i) {
+        popularCategories[i].name = name;
+        localStorage.setItem('arr', JSON.stringify(popularCategories));
     }
 
 </script>
@@ -135,16 +136,17 @@
     <section class="category">
         <div class="categories_list">
             <ul>
-                {#each popularCategories as {name}, i}
+                {#each popularCategories as {name, visible}, i}
                     <li>
                         <b>{ i + 1 }</b>
                         { name }
 
-                        <button class="edit_item_btn" on:click={() => showInput(i)}></button>
+                        <button class="edit_item_btn" on:click={() => visible = true}></button>
 
-                        {#if visibleInp}
-                            <input type="text" bind:value={name}>
-                        {/if}
+                            <!-- {#if visible} -->
+                                <input type="text" bind:value={name}>
+                                <button type="submit" on:click={() => handleSubmit(name, i)}>submit</button>
+                            <!-- {/if} -->
 
                         <button 
                             class="delete_item_btn"
