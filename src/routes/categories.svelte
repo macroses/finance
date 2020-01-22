@@ -142,12 +142,12 @@
                         <b>{ i + 1 }</b>
                         { category.name }
 
-                        <button class="edit_item_btn" on:click={() => category.visible = true}></button>
+                        <button class="edit_item_btn" on:click={() => category.visible = !category.visible}></button>
 
-                            <!-- {#if visible} -->
+                            {#if category.visible}
                                 <input type="text" bind:value={category.name}>
                                 <button type="submit" on:click={() => handleSubmit(category.id, category.name)}>submit</button>
-                            <!-- {/if} -->
+                            {/if}
 
                         <button 
                             class="delete_item_btn"
