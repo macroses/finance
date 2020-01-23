@@ -1,6 +1,5 @@
 <script>
     import TransitionWrapper from '../components/TransitionWrapper.svelte';
-
     
     let popularCategories = [];
     let customCategoryName = '';
@@ -19,6 +18,7 @@
 
     popularCategories = store;
 
+// добавление категории пользователя
     function addCategory() {
         if(customCategoryName === '') {
             return;
@@ -139,9 +139,10 @@
             <ul>
                 {#each popularCategories as category, i}
                     <li>
-                        <b>{ i + 1 }</b>
-                        { category.name }
-
+                        <a href="category_item/{category.id}" arrayForLink={124}>
+                            <b>{ i + 1 }</b>
+                            { category.name }
+                        </a>
                         <button class="edit_item_btn" on:click={() => category.visible = !category.visible}></button>
 
                             {#if category.visible}

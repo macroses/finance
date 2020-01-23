@@ -3,6 +3,9 @@
 	import Graph from '../components/Graph.svelte';
 	import TransitionWrapper from '../components/TransitionWrapper.svelte';
 
+	export let popularArr;
+	console.log(popularArr);
+
 </script>
 
 <TransitionWrapper>
