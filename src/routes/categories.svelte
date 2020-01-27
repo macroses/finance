@@ -1,22 +1,16 @@
 <script>
     import TransitionWrapper from '../components/TransitionWrapper.svelte';
-    
+    import CategoryService from '../service-finance.js';
+
     let popularCategories = [];
     let customCategoryName = '';
 
-    let store = JSON.parse(localStorage.getItem('arr'));
+    popularCategories = JSON.parse(localStorage.getItem('arr'));
 
-    if(store === null) {
-        store = [
-            {id: 1, name: 'Транспорт', visible: false},
-            {id: 2, name: 'Продукты', visible: false},
-            {id: 3, name: 'Здоровье', visible: false}
-        ];
-
-        localStorage.setItem('arr', JSON.stringify(store));
+    if(popularCategories === null) {
+        popularCategories = new CategoryService().storeDefault;
+        localStorage.setItem('arr', JSON.stringify(popularCategories));
     }
-
-    popularCategories = store;
 
 // добавление категории пользователя
     function addCategory() {
@@ -139,7 +133,7 @@
             <ul>
                 {#each popularCategories as category, i}
                     <li>
-                        <a href="category_item/{category.id}" arrayForLink={124}>
+                        <a href="category_item/{category.id}">
                             <b>{ i + 1 }</b>
                             { category.name }
                         </a>
