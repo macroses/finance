@@ -1,6 +1,13 @@
-<script>
-    let arrFromStore = JSON.parse(localStorage.getItem('arr'));
-    console.log(arrFromStore);
+<script context="module">
+	export async function preload(page, session) {
+		let idNum = page.params;
+        let data = JSON.parse(localStorage.getItem('arr'))
+		return console.log(data);;
+    }
 </script>
 
-<p>новая страница</p>
+<script>
+    export let pageId;
+</script>
+
+<p >новая страница {idNum}</p>
