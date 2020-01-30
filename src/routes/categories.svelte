@@ -1,14 +1,17 @@
 <script>
     import TransitionWrapper from '../components/TransitionWrapper.svelte';
-    import CategoryService from '../service-finance.js';
 
-    let popularCategories = [];
+    let popularCategories  = [];
     let customCategoryName = '';
 
     popularCategories = JSON.parse(localStorage.getItem('arr'));
 
     if(popularCategories === null) {
-        popularCategories = new CategoryService().storeDefault;
+        popularCategories = [
+            {id: 1, name: 'Транспорт', visible: false},
+            {id: 2, name: 'Продукты', visible: false},
+            {id: 3, name: 'Здоровье', visible: false}
+        ];
         localStorage.setItem('arr', JSON.stringify(popularCategories));
     }
 
@@ -25,12 +28,12 @@
         }
 
         let newObj = {
-            id: elem.id === undefined ? 1 : elem.id + 1,
-            name: customCategoryName,
+            id     : elem.id === undefined ? 1: elem.id + 1,
+            name   : customCategoryName,
             visible: false
         }
 
-        popularCategories = [...popularCategories, newObj];
+        popularCategories  = [...popularCategories, newObj];
         customCategoryName = '';
 
         localStorage.setItem('arr', JSON.stringify(popularCategories));

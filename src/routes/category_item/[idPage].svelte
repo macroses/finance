@@ -6,9 +6,14 @@
 </script>
 
 <script>
+    import CategoryService from '../../service-finance.js';
+
     export let idPage;
-    let arrFromStore = JSON.parse(localStorage.getItem('arr')).filter(e => e.id == idPage);
-    const { id, name, visible } = arrFromStore[0];
+
+    let categoryService = new CategoryService();
+    let arrFromStore    = JSON.parse(localStorage.getItem('arr'));
+
+    let { id, name, visible } = categoryService.getStoreElem(arrFromStore, idPage);
 </script>
 
 <p>новая страница {name}</p>
