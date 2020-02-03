@@ -6,14 +6,13 @@
 </script>
 
 <script>
-    import CategoryService from '../../service-finance.js';
+    import CategoryService from '../../service-finance';
 
     export let idPage;
 
     let categoryService = new CategoryService();
-    let arrFromStore    = JSON.parse(localStorage.getItem('arr'));
 
-    let { id, name, visible } = categoryService.getStoreElem(arrFromStore, idPage);
+    let { id, name, visible } = categoryService.getElem(idPage);
 </script>
 
 <p>новая страница {name}</p>

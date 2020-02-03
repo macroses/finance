@@ -1,53 +1,48 @@
 <script>
     import TransitionWrapper from '../components/TransitionWrapper.svelte';
+    import { fade } from 'svelte/transition';
+    import CategoryService from '../service-finance';
+
+    let categoryService = new CategoryService();
 
     let popularCategories  = [];
     let customCategoryName = '';
 
-    popularCategories = JSON.parse(localStorage.getItem('arr'));
 
-    if(popularCategories === null) {
-        popularCategories = [
+    if(categoryService.items === null) {
+        categoryService.items = [
             {id: 1, name: 'Транспорт', visible: false},
             {id: 2, name: 'Продукты', visible: false},
             {id: 3, name: 'Здоровье', visible: false}
         ];
-        localStorage.setItem('arr', JSON.stringify(popularCategories));
+        localStorage.setItem('arr', JSON.stringify(categoryService.items));
     }
 
-// добавление категории пользователя
-    function addCategory() {
+    const addCategory = () => {
         if(customCategoryName === '') {
             return;
         }
 
-        let elem = popularCategories[popularCategories.length -1];
+        let elem = categoryService.items[categoryService.items.length - 1];
 
         if(elem === undefined) {
             elem = 1;
         }
 
-        let newObj = {
-            id     : elem.id === undefined ? 1: elem.id + 1,
-            name   : customCategoryName,
-            visible: false
-        }
-
-        popularCategories  = [...popularCategories, newObj];
+        categoryService.items = categoryService.addItem(elem.id, customCategoryName);        
         customCategoryName = '';
 
-        localStorage.setItem('arr', JSON.stringify(popularCategories));
+        localStorage.setItem('arr', JSON.stringify(categoryService.items));
     }
 
-    function removeCategory(index) {
-        popularCategories = [...popularCategories.slice(0, index), ...popularCategories.slice(index + 1)]
-        localStorage.setItem('arr', JSON.stringify(popularCategories));
+    const removeCategory = (id) => {
+        categoryService.items = categoryService.removeItem(id);
+        localStorage.setItem('arr', JSON.stringify(categoryService.items));
     }
 
-    function handleSubmit(idNum, name) {
-        let elem = popularCategories.filter(a => a.id === idNum);
-        elem[0].name = name;
-        localStorage.setItem('arr', JSON.stringify(popularCategories));
+    const handleSubmit = (id, name) => {
+        categoryService.items = categoryService.editItem(id, name);
+        localStorage.setItem('arr', JSON.stringify(categoryService.items));
     }
 
 </script>
@@ -134,22 +129,24 @@
     <section class="category">
         <div class="categories_list">
             <ul>
-                {#each popularCategories as category, i}
+                {#each categoryService.items as category, i}
                     <li>
                         <a href="category_item/{category.id}">
                             <b>{ i + 1 }</b>
                             { category.name }
                         </a>
-                        <button class="edit_item_btn" on:click={() => category.visible = !category.visible}></button>
+                        <button class="edit_item_btn" on:click={() => handleSubmit(category.id, category.name)}></button>
 
                             {#if category.visible}
-                                <input type="text" bind:value={category.name}>
-                                <button type="submit" on:click={() => handleSubmit(category.id, category.name)}>submit</button>
+                                <span transition:fade>
+                                    <input type="text" bind:value={category.name}>
+                                    <button type="submit" on:click={handleSubmit(category.id, category.name)}>submit</button>
+                                </span>
                             {/if}
 
                         <button 
                             class="delete_item_btn"
-                            on:click={() => removeCategory(i)}></button>
+                            on:click={removeCategory(category.id)}></button>
                     </li>
                 {:else} 
                     <li class="need_more">Добавьте категорию</li>
