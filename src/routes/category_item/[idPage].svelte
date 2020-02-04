@@ -6,6 +6,7 @@
 </script>
 
 <script>
+
     import CategoryService from '../../service-finance';
     export let idPage;
     let categoryService = new CategoryService();
@@ -14,7 +15,61 @@
     let moneyValue = '';
     let commentValue = '';
 
+    let operationsArray = JSON.parse(localStorage.getItem(`operation${idPage}`));
+    if(operationsArray === null) {
+        operationsArray = [];
+        localStorage.setItem(`operation${idPage}`, JSON.stringify(operationsArray));
+    }
+
+    
+    localStorage.setItem(`operation${idPage}`, JSON.stringify(operationsArray.filter(e => e.categoryId === idPage)))
+
+
+    const addItem = () => {
+        if(moneyValue === '') {
+            return;
+        };
+
+        let elem = operationsArray[operationsArray.length - 1];
+
+        if(elem === undefined) {
+            elem = 1;
+        };
+
+        let newObj = {
+            id     : elem.id === undefined ? 1: elem.id + 1,
+            operationName   : commentValue,
+            operationValue: moneyValue,
+            categoryId: idPage
+        };
+
+        operationsArray = [...operationsArray, newObj];
+        moneyValue = '';
+        commentValue = '';
+
+        localStorage.setItem(`operation${idPage}`, JSON.stringify(operationsArray));
+    }
+
 </script>
+
+<h1>{name}</h1>
+<input type="number" placeholder="введите сумму" bind:value={moneyValue}>
+<textarea placeholder="Комментарий" bind:value={commentValue}></textarea>
+<button class="add_item" on:click={addItem}>Добавить</button>
+
+{#if operationsArray.length > 0}
+    <div class="description">Список операций</div>
+    <ul class="money_list">
+        {#each operationsArray as {id, operationName, operationValue}, i}
+            <li class="money_item">
+                <div class="money_item-value">{ operationValue }</div>
+                <div class="money_item-comment">{ operationName }</div>
+            </li>
+        {/each}
+    </ul>
+{:else}
+    <div class="description">Добавьте операцию</div>
+{/if}
 
 <style>
     h1 {
@@ -32,6 +87,7 @@
     .money_item {
         padding: 10px;
         border: 1px solid lightgray;
+        margin-bottom: 5px;
     }
 
     .money_item-value {
@@ -39,14 +95,19 @@
         font-weight: bold;
         margin-bottom: 10px;
     }
-</style>
 
-<h1>{name}</h1>
-<input type="number" placeholder="введите сумму" bind:value={moneyValue}>
-<textarea placeholder="Комментарий" bind:value={commentValue}></textarea>
-<ul class="money_list">
-    <li class="money_item">
-        <div class="money_item-value">{moneyValue}</div>
-        <div class="money_item-comment">{commentValue}</div>
-    </li>
-</ul>
+    .money_item-comment {
+        font-style: italic;
+    }
+    
+    .description{
+        color: gray;
+        font-size: 30px;
+        margin: 20px 0 10px;
+        text-align: center;
+    }
+
+    .add_item{
+        padding: 10px;
+    }
+</style>
