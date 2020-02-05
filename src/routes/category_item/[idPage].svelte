@@ -21,14 +21,21 @@
         operationsArray = [];
         localStorage.setItem(`${categoryId}`, JSON.stringify(operationsArray));
     }
-
     
     localStorage.setItem(`${categoryId}`, JSON.stringify(operationsArray.filter(e => e.categoryId === idPage)))
 
+    function onlydigits(node) {
+        function clean_value(){
+            node.value = node.value.replace(/[^\d]/g,'');
+        }
+        node.addEventListener('input',clean_value);
+    }
 
     const addItem = () => {
         if(moneyValue === '') {
             return;
+        } else if (commentValue === '') {
+            commentValue = '<Без комментария>'
         };
 
         let elem = operationsArray[operationsArray.length - 1];
@@ -38,10 +45,11 @@
         };
 
         let newObj = {
-            id     : elem.id === undefined ? 1: elem.id + 1,
-            operationName   : commentValue,
+            id            : elem.id === undefined ? 1: elem.id + 1,
+            operationName : commentValue,
             operationValue: moneyValue,
-            categoryId: categoryId
+            visibleEdit   : false,
+            categoryId    : categoryId
         };
 
         operationsArray = [...operationsArray, newObj];
@@ -56,22 +64,33 @@
         localStorage.setItem(`${categoryId}`, JSON.stringify(operationsArray));
     }
 
+    const editItem = (id) => {
+        let elem = operationsArray.filter(e => e.id === id);
+        elem[0].visibleEdit = !elem[0].visibleEdit;
+        operationsArray = operationsArray;
+        localStorage.setItem(`${categoryId}`, JSON.stringify(operationsArray));
+    }
+
 </script>
 
 <h1>{name}</h1>
-<input type="number" placeholder="введите сумму" bind:value={moneyValue}>
+<input type="number" placeholder="введите сумму" bind:value={moneyValue} use:onlydigits>
 <textarea placeholder="Комментарий" bind:value={commentValue}></textarea>
 <button class="add_item" on:click={addItem}>Добавить</button>
 
 {#if operationsArray.length > 0}
     <div class="description">Список операций</div>
     <ul class="money_list">
-        {#each operationsArray as {id, operationName, operationValue}, i}
+        {#each operationsArray as operation, i}
             <li class="money_item">
-                <div class="money_item-value">{ operationValue }</div>
-                <div class="money_item-comment">{ operationName }</div>
-                <button class="remove_item" on:click={ removeItem(id) }></button>
-                <button class="edit_item"></button>
+                <div class="money_item-value">{ operation.operationValue }</div>
+                <div class="money_item-comment">{ operation.operationName }</div>
+                <button class="remove_item" on:click={ removeItem(operation.id) }></button>
+                <button class="edit_item" on:click={ editItem(operation.id) }></button>
+                
+                {#if operation.visibleEdit}
+                    <p>123</p>
+                {/if}
             </li>
         {/each}
     </ul>
