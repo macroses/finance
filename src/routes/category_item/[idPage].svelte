@@ -14,15 +14,16 @@
 
     let moneyValue = '';
     let commentValue = '';
+    let categoryId = idPage;
 
-    let operationsArray = JSON.parse(localStorage.getItem(`operation${idPage}`));
+    let operationsArray = JSON.parse(localStorage.getItem(`${categoryId}`));
     if(operationsArray === null) {
         operationsArray = [];
-        localStorage.setItem(`operation${idPage}`, JSON.stringify(operationsArray));
+        localStorage.setItem(`${categoryId}`, JSON.stringify(operationsArray));
     }
 
     
-    localStorage.setItem(`operation${idPage}`, JSON.stringify(operationsArray.filter(e => e.categoryId === idPage)))
+    localStorage.setItem(`${categoryId}`, JSON.stringify(operationsArray.filter(e => e.categoryId === idPage)))
 
 
     const addItem = () => {
@@ -40,14 +41,19 @@
             id     : elem.id === undefined ? 1: elem.id + 1,
             operationName   : commentValue,
             operationValue: moneyValue,
-            categoryId: idPage
+            categoryId: categoryId
         };
 
         operationsArray = [...operationsArray, newObj];
         moneyValue = '';
         commentValue = '';
 
-        localStorage.setItem(`operation${idPage}`, JSON.stringify(operationsArray));
+        localStorage.setItem(`${categoryId}`, JSON.stringify(operationsArray));
+    }
+
+    const removeItem = (id) => {
+        operationsArray = operationsArray.filter(e => e.id !== id);
+        localStorage.setItem(`${categoryId}`, JSON.stringify(operationsArray));
     }
 
 </script>
@@ -64,6 +70,8 @@
             <li class="money_item">
                 <div class="money_item-value">{ operationValue }</div>
                 <div class="money_item-comment">{ operationName }</div>
+                <button class="remove_item" on:click={ removeItem(id) }></button>
+                <button class="edit_item"></button>
             </li>
         {/each}
     </ul>
@@ -88,6 +96,7 @@
         padding: 10px;
         border: 1px solid lightgray;
         margin-bottom: 5px;
+        position: relative;
     }
 
     .money_item-value {
@@ -109,5 +118,33 @@
 
     .add_item{
         padding: 10px;
+    }
+
+    .remove_item {
+        display: inline-block;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: url(../img/close.svg) no-repeat;
+        background-size: contain;
+        display: inline-block;
+        border: 1px solid lightgray;
+        border-radius: 3px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .edit_item {
+        display: inline-block;
+        position: absolute;
+        top: 10px;
+        right: 40px;
+        background: url(../img/pen.svg) no-repeat;
+        background-size: contain;
+        display: inline-block;
+        border: 1px solid lightgray;
+        border-radius: 3px;
+        width: 20px;
+        height: 20px;
     }
 </style>
