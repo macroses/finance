@@ -125,6 +125,10 @@
     
 </style>
 
+<svelte:head>
+	<title>Категории</title>
+</svelte:head>
+
 <TransitionWrapper>
     <section class="category">
         <div class="categories_list">

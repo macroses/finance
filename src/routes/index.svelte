@@ -5,6 +5,10 @@
 
 </script>
 
+<svelte:head>
+	<title>Учет расходов и доходов</title>
+</svelte:head>
+
 <TransitionWrapper>
 	<Header />
 	<main>

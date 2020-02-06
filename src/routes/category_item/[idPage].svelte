@@ -73,6 +73,10 @@
 
 </script>
 
+<svelte:head>
+	<title>{name}</title>
+</svelte:head>
+
 <h1>{name}</h1>
 <input type="number" placeholder="введите сумму" bind:value={moneyValue} use:onlydigits>
 <textarea placeholder="Комментарий" bind:value={commentValue}></textarea>
@@ -89,7 +93,8 @@
                 <button class="edit_item" on:click={ editItem(operation.id) }></button>
                 
                 {#if operation.visibleEdit}
-                    <p>123</p>
+                    <input type="text" use:onlydigits bind:value={operation.operationValue}>
+                    <textarea bind:value={operation.operationName}></textarea>
                 {/if}
             </li>
         {/each}
