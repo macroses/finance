@@ -4,13 +4,13 @@
 
 <style lang="scss">
     :global(.main_nav){
-        padding: 0;
-        display: flex;
-        list-style: none;
-        align-items: center;
+        padding        : 0;
+        display        : flex;
+        list-style     : none;
+        align-items    : center;
         justify-content: space-around;
-        margin-bottom: 20px;
-        margin-top: 0;
+        margin-bottom  : 20px;
+        margin-top     : 0;
         li{
             flex: 1;
             text-align: center;
@@ -20,8 +20,8 @@
         }
 
         a{
-            display: block;
-            border-bottom: 3px solid transparent;
+            display       : block;
+            border-bottom : 3px solid transparent;
             padding-bottom: 10px;
             &.selected{
                 border-bottom: 3px solid orange;

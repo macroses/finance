@@ -1,6 +1,6 @@
 <script>
     import {onMount} from 'svelte';
-    import { fly } from 'svelte/transition';
+    import { fly, slide, fade } from 'svelte/transition';
 
     let show = false;
 
@@ -17,7 +17,7 @@
 </style>
 
 {#if show}
-    <div in:fly={{x: -300, duration: 600}}>
+    <div in:fade={{x: -300, duration: 600}} out:slide>
         <slot></slot>
     </div>
 {/if}

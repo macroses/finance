@@ -1,6 +1,6 @@
 <script>
     import TransitionWrapper from '../components/TransitionWrapper.svelte';
-    import { fade } from 'svelte/transition';
+    import {fly, slide, fade} from 'svelte/transition';
     import CategoryService from '../service-finance';
 
     let categoryService = new CategoryService();
@@ -134,7 +134,7 @@
         <div class="categories_list">
             <ul>
                 {#each categoryService.items as category, i}
-                    <li>
+                    <li in:slide out:slide>
                         <a href="category_item/{category.id}">
                             <b>{ i + 1 }</b>
                             { category.name }

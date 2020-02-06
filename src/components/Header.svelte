@@ -1,7 +1,3 @@
-<script>
-    
-</script>
-
 <header>
     <div class="header_box">
         <div class="total_sum">100000 руб</div>
@@ -22,15 +18,15 @@
 <style lang="scss">
     header {
         background: #aea9f2;
-        color: #fff;
-        padding: 10px 0 50px;
-        position: relative;
+        color     : #fff;
+        padding   : 10px 0 50px;
+        position  : relative;
     }
 
     .total_sum{
-        text-align: center;
-        font-size: 50px;
-        font-weight: bold;
+        text-align   : center;
+        font-size    : 50px;
+        font-weight  : bold;
         margin-bottom: 50px;
     }
 
@@ -54,21 +50,20 @@
     }
 
     .add_operation_link{
-		display: flex;
-		align-items: center;
-		color: #fff;
+		display        : flex;
+		align-items    : center;
+		color          : #fff;
 		justify-content: center;
-		font-size: 70px;
+		font-size      : 70px;
 		text-decoration: none;
-		font-weight: bold;
-		position: absolute;
-		width: 100px;
-		height: 100px;
-		border-radius: 50%;
-		background: orange;
-
-		bottom: -50px;
-		left: calc(50% - 50px);
+		font-weight    : bold;
+		position       : absolute;
+		width          : 100px;
+		height         : 100px;
+		border-radius  : 50%;
+		background     : orange;
+		bottom         : -50px;
+		left           : calc(50% - 50px);
 	}
 
 </style>

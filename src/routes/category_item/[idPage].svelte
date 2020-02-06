@@ -6,10 +6,14 @@
 </script>
 
 <script>
-
+    import {fly, slide, fade} from 'svelte/transition';
     import CategoryService from '../../service-finance';
+    import CategoryItemService from './service-category-item.js';
+
     export let idPage;
     let categoryService = new CategoryService();
+    let categoryItemService = new CategoryItemService();
+
     let { id, name, visible } = categoryService.getElem(idPage);
 
     let moneyValue = '';
@@ -64,9 +68,13 @@
         localStorage.setItem(`${categoryId}`, JSON.stringify(operationsArray));
     }
 
-    const editItem = (id) => {
+    const editItem = (id, value, name) => {
         let elem = operationsArray.filter(e => e.id === id);
         elem[0].visibleEdit = !elem[0].visibleEdit;
+
+        elem[0].operationValue = value;
+        elem[0].operationName = name;
+
         operationsArray = operationsArray;
         localStorage.setItem(`${categoryId}`, JSON.stringify(operationsArray));
     }
@@ -86,15 +94,30 @@
     <div class="description">Список операций</div>
     <ul class="money_list">
         {#each operationsArray as operation, i}
-            <li class="money_item">
+            <li class="money_item" in:slide out:slide>
                 <div class="money_item-value">{ operation.operationValue }</div>
                 <div class="money_item-comment">{ operation.operationName }</div>
                 <button class="remove_item" on:click={ removeItem(operation.id) }></button>
-                <button class="edit_item" on:click={ editItem(operation.id) }></button>
+                <button class="edit_item" on:click={ 
+                    editItem(
+                        operation.id, 
+                        operation.operationValue, 
+                        operation.operationName
+                    )}></button>
                 
                 {#if operation.visibleEdit}
-                    <input type="text" use:onlydigits bind:value={operation.operationValue}>
-                    <textarea bind:value={operation.operationName}></textarea>
+                    <div transition:slide="{{ y: 20, duration: 200 }}">
+                        <input type="text" 
+                            use:onlydigits bind:value={operation.operationValue}>
+                        <textarea 
+                            bind:value={operation.operationName}></textarea>
+                        <button type="submit" on:click={
+                            editItem(
+                                operation.id, 
+                                operation.operationValue, 
+                                operation.operationName
+                            )}>submit</button>
+                    </div>
                 {/if}
             </li>
         {/each}
