@@ -17,7 +17,7 @@
 </style>
 
 {#if show}
-    <div in:fade={{x: -300, duration: 600}} out:slide>
+    <div out:slide>
         <slot></slot>
     </div>
 {/if}

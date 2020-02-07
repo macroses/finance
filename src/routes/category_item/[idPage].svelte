@@ -18,15 +18,14 @@
 
     let moneyValue = '';
     let commentValue = '';
-    let categoryId = idPage;
 
-    let operationsArray = JSON.parse(localStorage.getItem(`${categoryId}`));
+    let operationsArray = JSON.parse(localStorage.getItem('operations'));
     if(operationsArray === null) {
         operationsArray = [];
-        localStorage.setItem(`${categoryId}`, JSON.stringify(operationsArray));
+        localStorage.setItem('operations', JSON.stringify(operationsArray));
     }
     
-    localStorage.setItem(`${categoryId}`, JSON.stringify(operationsArray.filter(e => e.categoryId === idPage)))
+    localStorage.setItem('operations', JSON.stringify(operationsArray.filter(e => e.categoryId === idPage)));
 
     function onlydigits(node) {
         function clean_value(){
@@ -53,19 +52,19 @@
             operationName : commentValue,
             operationValue: moneyValue,
             visibleEdit   : false,
-            categoryId    : categoryId
+            categoryId    : idPage
         };
 
         operationsArray = [...operationsArray, newObj];
         moneyValue = '';
         commentValue = '';
 
-        localStorage.setItem(`${categoryId}`, JSON.stringify(operationsArray));
+        localStorage.setItem('operations', JSON.stringify(operationsArray));
     }
 
     const removeItem = (id) => {
         operationsArray = operationsArray.filter(e => e.id !== id);
-        localStorage.setItem(`${categoryId}`, JSON.stringify(operationsArray));
+        localStorage.setItem('operations', JSON.stringify(operationsArray));
     }
 
     const editItem = (id, value, name) => {
@@ -76,7 +75,7 @@
         elem[0].operationName = name;
 
         operationsArray = operationsArray;
-        localStorage.setItem(`${categoryId}`, JSON.stringify(operationsArray));
+        localStorage.setItem('operations', JSON.stringify(operationsArray));
     }
 
 </script>
@@ -85,46 +84,48 @@
 	<title>{name}</title>
 </svelte:head>
 
-<h1>{name}</h1>
-<input type="number" placeholder="введите сумму" bind:value={moneyValue} use:onlydigits>
-<textarea placeholder="Комментарий" bind:value={commentValue}></textarea>
-<button class="add_item" on:click={addItem}>Добавить</button>
+<div class="page-wrap" out:slide>
+    <h1>{name}</h1>
+    <input type="number" placeholder="введите сумму" bind:value={moneyValue} use:onlydigits>
+    <textarea placeholder="Комментарий" bind:value={commentValue}></textarea>
+    <button class="add_item" on:click={addItem}>Добавить</button>
 
-{#if operationsArray.length > 0}
-    <div class="description">Список операций</div>
-    <ul class="money_list">
-        {#each operationsArray as operation, i}
-            <li class="money_item" in:slide out:slide>
-                <div class="money_item-value">{ operation.operationValue }</div>
-                <div class="money_item-comment">{ operation.operationName }</div>
-                <button class="remove_item" on:click={ removeItem(operation.id) }></button>
-                <button class="edit_item" on:click={ 
-                    editItem(
-                        operation.id, 
-                        operation.operationValue, 
-                        operation.operationName
-                    )}></button>
-                
-                {#if operation.visibleEdit}
-                    <div transition:slide="{{ y: 20, duration: 200 }}">
-                        <input type="text" 
-                            use:onlydigits bind:value={operation.operationValue}>
-                        <textarea 
-                            bind:value={operation.operationName}></textarea>
-                        <button type="submit" on:click={
-                            editItem(
-                                operation.id, 
-                                operation.operationValue, 
-                                operation.operationName
-                            )}>submit</button>
-                    </div>
-                {/if}
-            </li>
-        {/each}
-    </ul>
-{:else}
-    <div class="description">Добавьте операцию</div>
-{/if}
+    {#if operationsArray.length > 0}
+        <div class="description">Список операций</div>
+        <ul class="money_list">
+            {#each operationsArray as operation, i}
+                <li class="money_item" in:slide out:slide>
+                    <div class="money_item-value">{ operation.operationValue }</div>
+                    <div class="money_item-comment">{ operation.operationName }</div>
+                    <button class="remove_item" on:click={ removeItem(operation.id) }></button>
+                    <button class="edit_item" on:click={ 
+                        editItem(
+                            operation.id, 
+                            operation.operationValue, 
+                            operation.operationName
+                        )}></button>
+                    
+                    {#if operation.visibleEdit}
+                        <div transition:slide="{{ y: 20, duration: 200 }}">
+                            <input type="text" 
+                                use:onlydigits bind:value={operation.operationValue}>
+                            <textarea 
+                                bind:value={operation.operationName}></textarea>
+                            <button type="submit" on:click={
+                                editItem(
+                                    operation.id, 
+                                    operation.operationValue, 
+                                    operation.operationName
+                                )}>submit</button>
+                        </div>
+                    {/if}
+                </li>
+            {/each}
+        </ul>
+    {:else}
+        <div class="description">Добавьте операцию</div>
+    {/if}
+</div>
 
 <style>
     h1 {
