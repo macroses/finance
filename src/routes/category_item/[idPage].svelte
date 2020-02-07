@@ -24,8 +24,14 @@
         operationsArray = [];
         localStorage.setItem('operations', JSON.stringify(operationsArray));
     }
-    
-    localStorage.setItem('operations', JSON.stringify(operationsArray.filter(e => e.categoryId === idPage)));
+    else {
+        
+    }
+
+
+    function useCurrentArr () {
+        operationsArray.filter(e => e.currentId === idPage);
+    }
 
     function onlydigits(node) {
         function clean_value(){
@@ -84,7 +90,7 @@
 	<title>{name}</title>
 </svelte:head>
 
-<div class="page-wrap" out:slide>
+<div class="page-wrap" out:slide use:useCurrentArr >
     <h1>{name}</h1>
     <input type="number" placeholder="введите сумму" bind:value={moneyValue} use:onlydigits>
     <textarea placeholder="Комментарий" bind:value={commentValue}></textarea>
