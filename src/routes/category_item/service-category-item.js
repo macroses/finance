@@ -1,6 +1,6 @@
 export default class CategoryItemService {
     constructor() {
-        this.items = JSON.parse(localStorage.getItem('arr'));
+        this.items = JSON.parse(localStorage.getItem('operations'));
     }
     
     getElem (pageId) {
@@ -18,12 +18,15 @@ export default class CategoryItemService {
         return this.items;
     }
 
-    addItem (id, name) {
+    addItem (id, name, value) {
+
         let newObj = {
-            id     : id === undefined ? 1: id + 1,
-            name   : name,
-            visible: false
-        }
+            id            : id === undefined ? 1: id + 1,
+            operationName : name,
+            operationValue: value,
+            visibleEdit   : false,
+            categoryId    : idPage
+        };
 
         return this.items = [...this.items, newObj];
     }

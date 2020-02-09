@@ -7,6 +7,7 @@
 
 <script>
     import {fly, slide, fade} from 'svelte/transition';
+    import { beforeUpdate } from 'svelte';
     import CategoryService from '../../service-finance';
     import CategoryItemService from './service-category-item.js';
 
@@ -24,15 +25,15 @@
         operationsArray = [];
         localStorage.setItem('operations', JSON.stringify(operationsArray));
     }
-    else {
-        
-    }
 
+    let newArr;
 
-    function useCurrentArr () {
-        operationsArray.filter(e => e.currentId === idPage);
-    }
+    // перед апдейтом отфильтруем отображаемый массив из стора.
+    beforeUpdate(() => {
+		newArr = operationsArray.filter(e => e.categoryId === idPage);
+	});
 
+    // валидация цифрового инпута
     function onlydigits(node) {
         function clean_value(){
             node.value = node.value.replace(/[^\d]/g,'');
@@ -90,7 +91,7 @@
 	<title>{name}</title>
 </svelte:head>
 
-<div class="page-wrap" out:slide use:useCurrentArr >
+<div class="page-wrap" out:slide>
     <h1>{name}</h1>
     <input type="number" placeholder="введите сумму" bind:value={moneyValue} use:onlydigits>
     <textarea placeholder="Комментарий" bind:value={commentValue}></textarea>
@@ -99,7 +100,7 @@
     {#if operationsArray.length > 0}
         <div class="description">Список операций</div>
         <ul class="money_list">
-            {#each operationsArray as operation, i}
+            {#each newArr as operation, i}
                 <li class="money_item" in:slide out:slide>
                     <div class="money_item-value">{ operation.operationValue }</div>
                     <div class="money_item-comment">{ operation.operationName }</div>
