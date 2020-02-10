@@ -1,32 +1,59 @@
 export default class CategoryItemService {
     constructor() {
         this.items = JSON.parse(localStorage.getItem('operations'));
+
+        this._writeLocalStorage = (arr) => {
+            localStorage.setItem('operations', JSON.stringify(arr));
+        }
+
+        if(this.items === null) {
+            this.items = [];
+            this._writeLocalStorage([]);
+        }
     }
     
-    getElem (pageId) {
+    get(options) {
+        if(options != null && options.categoryId != null)
+            return this.items.filter(a => a.categoryId == options.categoryId);
+
+        return this.items;
+    }
+
+    getOperationItem (pageId) {
         return this.items.filter(e => e.id == pageId)[0];
     }
 
-    removeItem (id) {
-        return this.items.filter(e => e.id !== id);
+    removeOperationItem (id) {
+        this.items.filter(e => e.id !== id);
+        return this._writeLocalStorage(this.items);
     }
 
-    editItem (id, name) {
+    editOperationItem (id, name) {
         let elem = this.items.filter(a => a.id === id);
         elem[0].name = name;
         elem[0].visible = !elem[0].visible;
         return this.items;
     }
 
-    addItem (id, name, value, pageId) {
+    addOperationItem (name, value, pageId) {
+        let elem = this.items[this.items.length - 1];
+
+        if(elem === undefined) {
+            elem = 1;
+        };
+
         let newObj = {
-            id            : id === undefined ? 1: id + 1,
+            id            : elem.id === undefined ? 1 : elem.id + 1,
             operationName : name,
             operationValue: value,
             visibleEdit   : false,
             categoryId    : pageId
         };
 
-        return this.items = [...this.items, newObj];
+        this.items = [...this.items, newObj];
+
+        this._writeLocalStorage(this.items);
+
+        return newObj;
     }
 };

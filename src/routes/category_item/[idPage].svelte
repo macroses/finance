@@ -15,26 +15,13 @@
     let categoryService = new CategoryService();
     let categoryItemService = new CategoryItemService();
 
-    
-
     let { id, name, visible } = categoryService.getElem(idPage);
 
     let moneyValue = '';
     let commentValue = '';
 
-    let operationsArray = JSON.parse(localStorage.getItem('operations'));
-    if(operationsArray === null) {
-        operationsArray = [];
-        localStorage.setItem('operations', JSON.stringify(operationsArray));
-    }
-
-    let newArr;
-
-    // перед апдейтом отфильтруем отображаемый массив из стора.
-    beforeUpdate(() => {
-		newArr = operationsArray.filter(e => e.categoryId === idPage);
-	});
-
+    let items = categoryItemService.get({categoryId: idPage});
+    
     // валидация цифрового инпута
     function onlydigits(node) {
         function clean_value(){
@@ -50,31 +37,29 @@
             commentValue = '<Без комментария>'
         };
 
-        let elem = operationsArray[operationsArray.length - 1];
+        categoryItemService.addOperationItem(commentValue, moneyValue, idPage);
 
-        if(elem === undefined) {
-            elem = 1;
-        };
-
-        operationsArray = categoryItemService.addItem(elem.id, commentValue, moneyValue, idPage)
+        items = categoryItemService.get({categoryId: idPage});
         moneyValue = '';
         commentValue = '';
     }
 
-    const removeItem = (id) => {
-        operationsArray = operationsArray.filter(e => e.id !== id);
-        localStorage.setItem('operations', JSON.stringify(operationsArray));
+    const removeItem = (idOperation) => {
+        
+        items = categoryItemService.removeOperationItem(idOperation);
+        
+        console.log(items)
     }
 
     const editItem = (id, value, name) => {
-        let elem = operationsArray.filter(e => e.id === id);
+        let elem = categoryItemService.items.filter(e => e.id === id);
         elem[0].visibleEdit = !elem[0].visibleEdit;
 
         elem[0].operationValue = value;
         elem[0].operationName = name;
 
-        operationsArray = operationsArray;
-        localStorage.setItem('operations', JSON.stringify(operationsArray));
+        categoryItemService.items = categoryItemService.items;
+        localStorage.setItem('operations', JSON.stringify(categoryItemService.items));
     }
 
 </script>
@@ -89,10 +74,10 @@
     <textarea placeholder="Комментарий" bind:value={commentValue}></textarea>
     <button class="add_item" on:click={addItem}>Добавить</button>
 
-    {#if operationsArray.length > 0}
+    {#if items.length > 0}
         <div class="description">Список операций</div>
         <ul class="money_list">
-            {#each newArr as operation, i}
+            {#each items as operation, i}
                 <li class="money_item" in:slide out:slide>
                     <div class="money_item-value">{ operation.operationValue }</div>
                     <div class="money_item-comment">{ operation.operationName }</div>
