@@ -24,15 +24,19 @@ export default class CategoryItemService {
     }
 
     removeOperationItem (id) {
-        this.items.filter(e => e.id !== id);
-        return this._writeLocalStorage(this.items);
+        this.items = this.items.filter(e => e.id !== id);
+        this._writeLocalStorage(this.items);
     }
 
-    editOperationItem (id, name) {
-        let elem = this.items.filter(a => a.id === id);
-        elem[0].name = name;
-        elem[0].visible = !elem[0].visible;
-        return this.items;
+    editOperationItem (id, value, name) {
+        let elem = this.items.filter(e => e.id === id);
+
+        elem[0].visibleEdit = !elem[0].visibleEdit;
+        elem[0].operationValue = value;
+        elem[0].operationName = name;
+
+        this.items = this.items;
+        this._writeLocalStorage(this.items);
     }
 
     addOperationItem (name, value, pageId) {

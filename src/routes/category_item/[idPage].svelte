@@ -7,7 +7,6 @@
 
 <script>
     import {fly, slide, fade} from 'svelte/transition';
-    import { beforeUpdate } from 'svelte';
     import CategoryService from '../../service-finance';
     import CategoryItemService from './service-category-item.js';
 
@@ -45,21 +44,13 @@
     }
 
     const removeItem = (idOperation) => {
-        
-        items = categoryItemService.removeOperationItem(idOperation);
-        
-        console.log(items)
+        categoryItemService.removeOperationItem(idOperation);
+        items = categoryItemService.get({categoryId: idPage});
     }
 
     const editItem = (id, value, name) => {
-        let elem = categoryItemService.items.filter(e => e.id === id);
-        elem[0].visibleEdit = !elem[0].visibleEdit;
-
-        elem[0].operationValue = value;
-        elem[0].operationName = name;
-
-        categoryItemService.items = categoryItemService.items;
-        localStorage.setItem('operations', JSON.stringify(categoryItemService.items));
+        categoryItemService.editOperationItem(id, value, name);
+        items = categoryItemService.get({categoryId: idPage});
     }
 
 </script>
