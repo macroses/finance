@@ -15,6 +15,8 @@
     let categoryService = new CategoryService();
     let categoryItemService = new CategoryItemService();
 
+    
+
     let { id, name, visible } = categoryService.getElem(idPage);
 
     let moneyValue = '';
@@ -54,19 +56,9 @@
             elem = 1;
         };
 
-        let newObj = {
-            id            : elem.id === undefined ? 1: elem.id + 1,
-            operationName : commentValue,
-            operationValue: moneyValue,
-            visibleEdit   : false,
-            categoryId    : idPage
-        };
-
-        operationsArray = [...operationsArray, newObj];
+        operationsArray = categoryItemService.addItem(elem.id, commentValue, moneyValue, idPage)
         moneyValue = '';
         commentValue = '';
-
-        localStorage.setItem('operations', JSON.stringify(operationsArray));
     }
 
     const removeItem = (id) => {

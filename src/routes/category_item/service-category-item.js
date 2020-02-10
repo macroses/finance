@@ -18,14 +18,13 @@ export default class CategoryItemService {
         return this.items;
     }
 
-    addItem (id, name, value) {
-
+    addItem (id, name, value, pageId) {
         let newObj = {
             id            : id === undefined ? 1: id + 1,
             operationName : name,
             operationValue: value,
             visibleEdit   : false,
-            categoryId    : idPage
+            categoryId    : pageId
         };
 
         return this.items = [...this.items, newObj];
