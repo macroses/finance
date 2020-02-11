@@ -1,5 +1,4 @@
 <script>
-    import TransitionWrapper from '../components/TransitionWrapper.svelte';
     import {fly, slide, fade} from 'svelte/transition';
     import CategoryService from '../service-finance';
 
@@ -54,17 +53,40 @@
 
     .categories_list {
         flex: 1;
-        background-color: cornsilk;
+        
+
         li {
             position: relative;
-            padding: 10px 20px;
-            border-bottom: 1px solid lightgray;
-            cursor: pointer;
-            text-align: center;
-            &:hover {
-                background-color: #fff;
+            background-color: #33333d;
+            padding: 0 20px;
+            a {
+                color: #a3a3a3;
+                text-decoration: none;
+                display: block;
+                width: 100%;
+                height: 100%;
+                padding: 20px 0;
+                border-bottom: 1px solid #26262e;
+                position: relative;
+                transition: .2s;
+                &:hover{
+                    color: #fff;
+                    &:before {
+                        width: 100%;
+                    }
+                }
+
+                &:before {
+                    content: '';
+                    position: absolute;
+                    height: 1px;
+                    width: 0;
+                    background: rgba(55, 239, 186, .3);
+                    top: 100%;
+                    left: 0;
+                    transition: .2s;
+                }
             }
-            
         }
 
         .need_more {
@@ -94,32 +116,36 @@
 
     .delete_item_btn{
         position: absolute;
-        background: url(../img/close.svg) no-repeat;
-        background-size: contain;
         display: inline-block;
-        width: 20px;
+        width: 40px;
         height: 100%;
         z-index: 2;
-
-        top: 0; right: 0;
+        background-color: transparent;
+        color: #a3a3a3;
+        top: 0; right: 10px;
         border: 0;
         outline: 0;
         cursor: pointer;
+        &:hover{
+            color: #fff;
+        }
     }
 
     .edit_item_btn{
         position: absolute;
-        background: url(../img/pen.svg) no-repeat;
-        background-size: contain;
         display: inline-block;
-        width: 20px;
+        width: 40px;
         height: 100%;
         z-index: 2;
-
-        top: 0; right: 30px;
+        background-color: transparent;
+        color: #a3a3a3;
+        top: 0; right: 50px;
         border: 0;
         outline: 0;
         cursor: pointer;
+        &:hover{
+            color: #fff;
+        }
     }
 
     
@@ -129,38 +155,37 @@
 	<title>Категории</title>
 </svelte:head>
 
-<TransitionWrapper>
-    <section class="category">
-        <div class="categories_list">
-            <ul>
-                {#each categoryService.items as category, i}
-                    <li in:slide out:slide>
-                        <a href="category_item/{category.id}">
-                            <b>{ i + 1 }</b>
-                            { category.name }
-                        </a>
-                        <button class="edit_item_btn" on:click={() => handleSubmit(category.id, category.name)}></button>
 
-                            {#if category.visible}
-                                <span transition:fade>
-                                    <input type="text" bind:value={category.name}>
-                                    <button type="submit" on:click={handleSubmit(category.id, category.name)}>submit</button>
-                                </span>
-                            {/if}
+<section class="category" in:slide out:slide>
+    <div class="categories_list">
+        <ul>
+            {#each categoryService.items as category, i}
+                <li>
+                    <a href="category_item/{category.id}">
+                        { category.name }
+                    </a>
+                    <button class="edit_item_btn" on:click={() => handleSubmit(category.id, category.name)}><i class="material-icons">edit</i></button>
 
-                        <button 
-                            class="delete_item_btn"
-                            on:click={removeCategory(category.id)}></button>
-                    </li>
-                {:else} 
-                    <li class="need_more">Добавьте категорию</li>
-                {/each}
-            </ul>
+                        {#if category.visible}
+                            <span transition:fade>
+                                <input type="text" bind:value={category.name}>
+                                <button type="submit" on:click={handleSubmit(category.id, category.name)}>submit</button>
+                            </span>
+                        {/if}
 
-            <div class="add_category">
-                <input type="text" bind:value={ customCategoryName }>
-                <button on:click|preventDefault={ addCategory }>Добавить категорию</button>
-            </div>
+                    <button 
+                        class="delete_item_btn"
+                        on:click={removeCategory(category.id)}><i class="material-icons">close</i></button>
+                </li>
+            {:else} 
+                <li class="need_more">Добавьте категорию</li>
+            {/each}
+        </ul>
+
+        <div class="add_category">
+            <input type="text" bind:value={ customCategoryName }>
+            <button on:click|preventDefault={ addCategory }>Добавить категорию</button>
         </div>
-    </section>
-</TransitionWrapper>
+    </div>
+</section>
+

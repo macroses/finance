@@ -1,7 +1,6 @@
 <script>
 	import Header from '../components/Header.svelte';
 	import Graph from '../components/Graph.svelte';
-	import TransitionWrapper from '../components/TransitionWrapper.svelte';
 
 </script>
 
@@ -9,12 +8,10 @@
 	<title>Учет расходов и доходов</title>
 </svelte:head>
 
-<TransitionWrapper>
-	<Header />
-	<main>
-		<Graph />
-	</main>
-</TransitionWrapper>
+<Header />
+<main>
+	
+</main>
 
 
 <style>
@@ -25,5 +22,6 @@
 	}
 	main{
 		position: relative;
+		background: #33333d;
 	}
 </style>

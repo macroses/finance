@@ -9,8 +9,7 @@
         list-style     : none;
         align-items    : center;
         justify-content: space-around;
-        margin-bottom  : 20px;
-        margin-top     : 0;
+        background: #27272f;
         li{
             flex: 1;
             text-align: center;
@@ -20,11 +19,22 @@
         }
 
         a{
-            display       : block;
+            display       : flex;
+            align-items: center;
+            justify-content: center;
             border-bottom : 3px solid transparent;
-            padding-bottom: 10px;
+            padding: 10px 0;
+            color: #a3a3a3;
+            text-decoration: none;
+            font-weight: bold;
             &.selected{
-                border-bottom: 3px solid orange;
+                border-bottom: 3px solid #37efba;
+                color: #fff;
+            }
+
+            i {
+                margin-right: 10px;
+                font-size: 18px;
             }
         }
     }
@@ -32,9 +42,9 @@
 
 <ul class="main_nav">
     <li>
-        <a href="." class:selected={segment === undefined}><img src="img/home.svg" alt=""></a>
+        <a href="." class:selected={segment === undefined}><i class="material-icons">home</i>Home</a>
     </li>
     <li>
-        <a href="categories" class:selected={segment === 'categories'}><img src="img/folder.svg" alt=""></a>
+        <a href="categories" class:selected={segment === 'categories'}><i class="material-icons">category</i>Categories</a>
     </li>
 </ul>

@@ -1,26 +1,38 @@
-<header>
+<script>
+    import Graph from '../components/Graph.svelte';
+    import {fly, slide, fade} from 'svelte/transition';
+</script>
+
+<header >
+    <Graph />
     <div class="header_box">
-        <div class="total_sum">100000 руб</div>
+        <div class="total_sum"><i class="material-icons">attach_money</i>86540</div>
         <div class="main_data">
             <div class="main_data_item">
                 <div class="title">Доход</div>
-                <div class="main_data_item_value profit">+ 5500 руб</div>
+                <div class="main_data_item_value profit"><i class="material-icons">attach_money</i>5500</div>
             </div>
             <div class="main_data_item">
                 <div class="title">Расход</div>
-                <div class="main_data_item_value loss">- 800 руб</div>
+                <div class="main_data_item_value loss"><i class="material-icons">attach_money</i>800</div>
             </div>
         </div>
     </div>
-    <a href="/categories" class="add_operation_link">+</a>
+    <a href="/categories" class="add_operation_link">
+        +
+    </a>
 </header>
 
 <style lang="scss">
     header {
-        background: #aea9f2;
+        background: #33333d;
         color     : #fff;
         padding   : 10px 0 50px;
         position  : relative;
+    }
+
+    .header_box{
+        margin-top: 30px;
     }
 
     .total_sum{
@@ -28,6 +40,12 @@
         font-size    : 50px;
         font-weight  : bold;
         margin-bottom: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        i{
+            font-size: 45px;
+        }
     }
 
     .main_data{
@@ -37,33 +55,40 @@
 
     .main_data_item{
         font-weight: bold;
+        font-size: 30px;
+        text-align: center;
+        i {
+            font-size: 30px;
+        }
         .profit{
-            color: green;
+            color: #1eb980;
         }
         .loss{
-            color: red;
+            color: #ff6859;
+        }
+
+        &_value {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     }
 
     .title{
-        font-size: 25px;
+        font-size: 15px;
+        color: #a3a3a3;
+        margin-bottom: 10px;
     }
 
     .add_operation_link{
 		display        : flex;
 		align-items    : center;
-		color          : #fff;
 		justify-content: center;
-		font-size      : 70px;
 		text-decoration: none;
-		font-weight    : bold;
 		position       : absolute;
-		width          : 100px;
-		height         : 100px;
-		border-radius  : 50%;
-		background     : orange;
 		bottom         : -50px;
-		left           : calc(50% - 50px);
+        left           : calc(50% - 50px);
+        
 	}
 
 </style>
