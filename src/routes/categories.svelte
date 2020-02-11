@@ -1,5 +1,5 @@
 <script>
-    import {fly, slide, fade} from 'svelte/transition';
+    import {fly, slide, fade, scale} from 'svelte/transition';
     import CategoryService from '../service-finance';
 
     let categoryService = new CategoryService();
@@ -7,6 +7,9 @@
     let popularCategories  = [];
     let customCategoryName = '';
 
+    const clearInput = () => {
+        customCategoryName = '';
+    }
 
     if(categoryService.items === null) {
         categoryService.items = [
@@ -53,8 +56,6 @@
 
     .categories_list {
         flex: 1;
-        
-
         li {
             position: relative;
             background-color: #33333d;
@@ -71,20 +72,6 @@
                 transition: .2s;
                 &:hover{
                     color: #fff;
-                    &:before {
-                        width: 100%;
-                    }
-                }
-
-                &:before {
-                    content: '';
-                    position: absolute;
-                    height: 1px;
-                    width: 0;
-                    background: rgba(55, 239, 186, .3);
-                    top: 100%;
-                    left: 0;
-                    transition: .2s;
                 }
             }
         }
@@ -98,19 +85,61 @@
 
     .add_category {
         display: flex;
-        flex-direction: column;
         padding: 10px 20px;
+        align-items: center;
         input {
-            margin-bottom: 10px;
-            padding: 5px 7px;
+            padding: 12px 7px;
+            background: #26282f;
+            color: #fff;
+            font-size: 13px;
+            border: 0;
+            width: 100%;
+            border-radius: 2px;
+            transition: .2s;
+            outline: 0;
+            &::placeholder{
+                font-style: italic;
+                font-size: 13px;
+            }
+
+            &:hover {
+                box-shadow: 0 0 1px 1px rgba(55, 239, 186, .5);
+            }
+
+            &:focus, &:active {
+                box-shadow: 0 0 1px 1px rgba(55, 239, 186, 1);
+            }
         }
 
         button {
-            background-color: #ff3e00;
-            color: #fff;
-            font-size: 25px;
-            border: 1px solid lightgray;
-            border-radius: 4px;
+            color: #a3a3a3;
+            border: 0;
+            background: transparent;
+            border-radius: 2px;
+            display: block;
+            font-size: 13px;
+            padding: 10px 15px;
+            outline: 0;
+            cursor: pointer;
+            border: 1px solid #a3a3a3;
+            transition: .2s;
+            &:hover{
+                color: rgba(55, 239, 186, .7);
+                border-color: rgba(55, 239, 186, .7);
+            }
+        }
+    }
+
+    .inp_wrap{
+        width: 50%;
+        margin-right: 10px;
+        position: relative;
+        i {
+            position: absolute;
+            color: #a3a3a3;
+            right: 7px;
+            top: 7px;
+            cursor: pointer;
         }
     }
 
@@ -156,11 +185,11 @@
 </svelte:head>
 
 
-<section class="category" in:slide out:slide>
-    <div class="categories_list">
+<section class="category">
+    <div class="categories_list" out:slide>
         <ul>
             {#each categoryService.items as category, i}
-                <li>
+                <li transition:slide>
                     <a href="category_item/{category.id}">
                         { category.name }
                     </a>
@@ -183,8 +212,13 @@
         </ul>
 
         <div class="add_category">
-            <input type="text" bind:value={ customCategoryName }>
-            <button on:click|preventDefault={ addCategory }>Добавить категорию</button>
+            <div class="inp_wrap">
+                <input type="text" bind:value={ customCategoryName } placeholder="Введите название категории">
+                {#if customCategoryName.length > 0}
+                    <i class="material-icons" on:click={clearInput}>close</i>
+                {/if}
+            </div>
+            <button on:click|preventDefault={ addCategory }>Добавить</button>
         </div>
     </div>
 </section>

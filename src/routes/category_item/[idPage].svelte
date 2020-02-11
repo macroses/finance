@@ -6,7 +6,7 @@
 </script>
 
 <script>
-    import {fly, slide, fade} from 'svelte/transition';
+    import {fly, slide, fade, scale} from 'svelte/transition';
     import CategoryService from '../../service-finance';
     import CategoryItemService from './service-category-item.js';
 
@@ -59,7 +59,7 @@
 	<title>{name}</title>
 </svelte:head>
 
-<div class="page-wrap" out:slide>
+<div class="page-wrap" in:scale="{{duration: 500, opacity: 0.5, start: 0}}" out:slide>
     <h1>{name}</h1>
     <input type="number" placeholder="введите сумму" bind:value={moneyValue} use:onlydigits>
     <textarea placeholder="Комментарий" bind:value={commentValue}></textarea>

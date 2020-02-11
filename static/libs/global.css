@@ -5,4 +5,5 @@
 }
 body {
     background-color: #424250;
+    max-height: 100vh;
 }

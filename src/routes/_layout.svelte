@@ -15,6 +15,7 @@
 		margin: 20px auto 0;
         font-family: 'Roboto Condensed', sans-serif;
         box-shadow: 0px 4px 10px 5px rgba(0, 0, 0, .5);
+        overflow: hidden;
 	}
 
     :global(*) {
