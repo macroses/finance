@@ -23,10 +23,10 @@
     
     // валидация цифрового инпута
     function onlydigits(node) {
-        function clean_value(){
-            node.value = node.value.replace(/[^\d]/g,'');
-        }
-        node.addEventListener('input',clean_value);
+        // function clean_value(){
+        //     node.value = node.value.replace(/[^\d]/g,'');
+        // }
+        // node.addEventListener('input',clean_value);
     }
 
     const addItem = () => {
@@ -69,21 +69,27 @@
         <div class="description">Список операций</div>
         <ul class="money_list">
             {#each items as operation, i}
-                <li class="money_item" in:slide out:slide>
+                <li class="money_item plus" 
+                    class:minus={operation.operationValue < 0} 
+                    in:slide out:slide>
+
                     <div class="money_item-value">{ operation.operationValue }</div>
                     <div class="money_item-comment">{ operation.operationName }</div>
-                    <button class="remove_item" on:click={ removeItem(operation.id) }></button>
+                    <button class="remove_item"
+                        on:click={ removeItem(operation.id) }><i class="material-icons">close</i></button>
+
                     <button class="edit_item" on:click={ 
                         editItem(
                             operation.id, 
                             operation.operationValue, 
                             operation.operationName
-                        )}></button>
+                        )}><i class="material-icons">edit</i></button>
                     
                     {#if operation.visibleEdit}
-                        <div transition:slide="{{ y: 20, duration: 200 }}">
-                            <input type="text" 
-                                use:onlydigits bind:value={operation.operationValue}>
+                        <div class="edit_operation_box" transition:slide>
+                            <input type="number" 
+                                use:onlydigits 
+                                bind:value={operation.operationValue}>
                             <textarea 
                                 bind:value={operation.operationName}></textarea>
                             <button type="submit" on:click={
@@ -91,7 +97,7 @@
                                     operation.id, 
                                     operation.operationValue, 
                                     operation.operationName
-                                )}>submit</button>
+                                )}><i class="material-icons">check</i></button>
                         </div>
                     {/if}
                 </li>
@@ -102,34 +108,116 @@
     {/if}
 </div>
 
-<style>
+<style lang="scss">
+    .page-wrap {
+        padding: 0 20px;
+    }
+
+    .edit_operation_box{
+        width: 100%;
+        margin-top: 10px;
+        display: flex;
+        input[type=number] {
+            font-size: 22px;
+            font-weight: bold;
+            padding: 10px;
+            flex: 1;
+            margin-right: 10px;
+            margin-bottom: 0;
+        }
+
+        textarea {
+            flex : 1;
+            margin-right: 10px;
+            resize: none;
+            margin-bottom: 0;
+        }
+
+        button {
+            padding: 6px 10px;
+            background: transparent;
+            border-radius: 2px;
+            color: #fff;
+            border: 1px solid #fff;
+            opacity: .5;
+            cursor: pointer;
+            transition: .2s;
+            margin-bottom: 0;
+            &:hover{
+                opacity: 1;
+                color: rgba(55, 239, 186, 1); 
+            }
+        }
+    }
+
     h1 {
-        font-size: 50px;
-        text-align: center;
+        font-size: 30px;
+        color: #ffffff;
     }
 
     input[type=number], textarea {
-        width: 100%;
-        padding: 5px;
         margin-bottom: 10px;
-        font-size: 22px;
+        padding: 12px 7px;
+        background: #26282f;
+        color: #fff;
+        font-size: 13px;
+        border: 0;
+        width: 100%;
+        border-radius: 2px;
+        transition: .2s;
+        outline: 0;
+            &::placeholder{
+                font-style: italic;
+                font-size: 13px;
+            }
+
+            &:hover {
+                box-shadow: 0 0 1px 1px rgba(55, 239, 186, .5);
+            }
+
+            &:focus, &:active {
+                box-shadow: 0 0 1px 1px rgba(55, 239, 186, 1);
+            }
     }
 
     .money_item {
-        padding: 10px;
-        border: 1px solid lightgray;
-        margin-bottom: 5px;
+        padding: 10px 10px 10px 25px;
+        margin-bottom: 15px;
         position: relative;
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+        }
+
+        &.plus {
+            &:before{
+                background: rgba(55, 239, 186, 1);
+            }
+        }
+
+        &.minus {
+            &:before {
+                background: lightpink;
+            }
+        }
     }
 
     .money_item-value {
         font-size: 22px;
         font-weight: bold;
         margin-bottom: 10px;
+        color: #ffffff;
     }
 
     .money_item-comment {
         font-style: italic;
+        font-size: 14px;
+        color: #a3a3a3;
     }
     
     .description{
@@ -140,34 +228,54 @@
     }
 
     .add_item{
-        padding: 10px;
+        color: #a3a3a3;
+        border: 0;
+        background: transparent;
+        border-radius: 2px;
+        display: block;
+        font-size: 13px;
+        padding: 10px 15px;
+        outline: 0;
+        cursor: pointer;
+        border: 1px solid #a3a3a3;
+        transition: .2s;
+        &:hover{
+            color: rgba(55, 239, 186, .7);
+            border-color: #fff;
+        }
     }
 
     .remove_item {
-        display: inline-block;
         position: absolute;
-        top: 10px;
-        right: 10px;
-        background: url(../img/close.svg) no-repeat;
-        background-size: contain;
         display: inline-block;
-        border: 1px solid lightgray;
-        border-radius: 3px;
-        width: 20px;
-        height: 20px;
+        width: 40px;
+        height: 40px;
+        z-index: 2;
+        background-color: transparent;
+        color: #a3a3a3;
+        top: 0; right: 0px;
+        border: 0;
+        outline: 0;
+        cursor: pointer;
+        &:hover{
+            color: #fff;
+        }
     }
 
     .edit_item {
-        display: inline-block;
         position: absolute;
-        top: 10px;
-        right: 40px;
-        background: url(../img/pen.svg) no-repeat;
-        background-size: contain;
         display: inline-block;
-        border: 1px solid lightgray;
-        border-radius: 3px;
-        width: 20px;
-        height: 20px;
+        width: 40px;
+        height: 40px;
+        z-index: 2;
+        background-color: transparent;
+        color: #a3a3a3;
+        top: 0; right: 40px;
+        border: 0;
+        outline: 0;
+        cursor: pointer;
+        &:hover{
+            color: #fff;
+        }
     }
 </style>

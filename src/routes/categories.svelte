@@ -11,6 +11,10 @@
         customCategoryName = '';
     }
 
+    function setFocus (el) {
+        el.focus();
+    }
+
     if(categoryService.items === null) {
         categoryService.items = [
             {id: 1, name: 'Транспорт', visible: false},
@@ -81,8 +85,6 @@
         }
     }
 
-
-
     .add_category {
         display: flex;
         padding: 10px 20px;
@@ -125,7 +127,7 @@
             transition: .2s;
             &:hover{
                 color: rgba(55, 239, 186, .7);
-                border-color: rgba(55, 239, 186, .7);
+                border-color: #fff;
             }
         }
     }
@@ -177,6 +179,43 @@
         }
     }
 
+    .edit_box {
+        position: absolute;
+        top: 8px;
+        display: flex;
+        input {
+            padding: 12px 7px 12px 0;
+            background: #26282f;
+            color: #fff;
+            border: 0;
+            margin-right: 10px;
+
+            &:hover {
+                box-shadow: 0 0 1px 1px rgba(55, 239, 186, .5);
+            }
+
+            &:focus, &:active {
+                box-shadow: 0 0 1px 1px rgba(55, 239, 186, 1);
+            }
+        }
+
+        button {
+            padding: 6px 10px;
+            height: 100%;
+            background: transparent;
+            border-radius: 2px;
+            color: #fff;
+            border: 1px solid #fff;
+            opacity: .5;
+            cursor: pointer;
+            transition: .2s;
+            &:hover{
+                opacity: 1;
+                color: rgba(55, 239, 186, 1); 
+            }
+        }
+    }
+
     
 </style>
 
@@ -195,12 +234,12 @@
                     </a>
                     <button class="edit_item_btn" on:click={() => handleSubmit(category.id, category.name)}><i class="material-icons">edit</i></button>
 
-                        {#if category.visible}
-                            <span transition:fade>
-                                <input type="text" bind:value={category.name}>
-                                <button type="submit" on:click={handleSubmit(category.id, category.name)}>submit</button>
-                            </span>
-                        {/if}
+                    {#if category.visible}
+                        <span class="edit_box">
+                            <input type="text" bind:value={category.name} use:setFocus>
+                            <button type="submit" on:click={handleSubmit(category.id, category.name)}><i class="material-icons">check</i></button>
+                        </span>
+                    {/if}
 
                     <button 
                         class="delete_item_btn"
@@ -218,7 +257,7 @@
                     <i class="material-icons" on:click={clearInput}>close</i>
                 {/if}
             </div>
-            <button on:click|preventDefault={ addCategory }>Добавить</button>
+            <button on:click={ addCategory }>Добавить</button>
         </div>
     </div>
 </section>
