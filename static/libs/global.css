@@ -3,7 +3,10 @@
     padding: 0;
     box-sizing: border-box;
 }
-body {
-    background-color: #424250;
-    max-height: 100vh;
+
+@media screen and (min-width: 320px) {
+    html {
+        margin-left: calc(100vw - 100%);
+        margin-right: 0;
+    }
 }

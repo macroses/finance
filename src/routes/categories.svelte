@@ -82,6 +82,8 @@
 
         .need_more {
             pointer-events: none;
+            color: #a3a3a3;
+            margin-top: 10px;
         }
     }
 

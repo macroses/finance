@@ -42,9 +42,12 @@
 
 <ul class="main_nav">
     <li>
-        <a href="." class:selected={segment === undefined}><i class="material-icons">home</i>Home</a>
+        <a href="." class:selected={segment === undefined}><i class="material-icons">home</i>Главная</a>
     </li>
     <li>
-        <a href="categories" class:selected={segment === 'categories'}><i class="material-icons">category</i>Categories</a>
+        <a href="categories" class:selected={segment === 'categories'}><i class="material-icons">category</i>Категории</a>
+    </li>
+    <li>
+        <a href="accounts" class:selected={segment === 'accounts'}><i class="material-icons">credit_card</i>Счета</a>
     </li>
 </ul>

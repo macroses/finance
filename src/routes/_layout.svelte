@@ -17,7 +17,11 @@
         box-shadow: 0px 4px 10px 5px rgba(0, 0, 0, .5);
         overflow: hidden;
         background: #33333d;
-	}
+    }
+    
+    :global(body) {
+        background-color: #424250;
+    }
 
     :global(*) {
         margin: 0;
