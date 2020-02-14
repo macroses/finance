@@ -1,5 +1,6 @@
 <script>
     import MainNav from '../components/MainNav.svelte'
+    import {fly, slide, fade} from 'svelte/transition';
 
     export let segment;
 </script>

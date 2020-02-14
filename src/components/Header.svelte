@@ -3,7 +3,7 @@
     import {fly, slide, fade} from 'svelte/transition';
 </script>
 
-<header >
+<header out:slide>
     <Graph />
     <div class="header_box">
         <div class="total_sum"><i class="material-icons">attach_money</i>86540</div>
