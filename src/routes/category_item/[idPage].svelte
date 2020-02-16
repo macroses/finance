@@ -9,6 +9,7 @@
     import {fly, slide, fade, scale} from 'svelte/transition';
     import CategoryService from '../../service-finance';
     import CategoryItemService from './service-category-item.js';
+    import BankAccountSelect from '../../components/BankAccaunt.svelte';
 
     export let idPage;
     let categoryService = new CategoryService();
@@ -62,6 +63,7 @@
 <div class="page-wrap" in:scale="{{duration: 500, opacity: 0.5, start: 0}}" out:slide>
     <h1>{name}</h1>
     <input type="number" placeholder="введите сумму" bind:value={moneyValue} use:onlydigits>
+    <BankAccountSelect />
     <textarea placeholder="Комментарий" bind:value={commentValue}></textarea>
     <button class="add_item" on:click={addItem}>Добавить</button>
 

@@ -11,10 +11,6 @@
         customCategoryName = '';
     }
 
-    function setFocus (el) {
-        el.focus();
-    }
-
     if(categoryService.items === null) {
         categoryService.items = [
             {id: 1, name: 'Транспорт', visible: false},
@@ -238,7 +234,7 @@
 
                     {#if category.visible}
                         <span class="edit_box">
-                            <input type="text" bind:value={category.name} use:setFocus>
+                            <input type="text" bind:value={category.name}>
                             <button type="submit" on:click={handleSubmit(category.id, category.name)}><i class="material-icons">check</i></button>
                         </span>
                     {/if}
