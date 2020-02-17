@@ -1,5 +1,8 @@
 <script>
     import {fly, slide, fade, scale} from 'svelte/transition';
+    import ButtonApply from '../components/UI/ButtonApply.svelte';
+    import InputText from '../components/UI/InputText.svelte';
+
     import CategoryService from '../service-finance';
 
     let categoryService = new CategoryService();
@@ -49,6 +52,50 @@
 
 </script>
 
+<svelte:head>
+	<title>Категории</title>
+</svelte:head>
+
+
+<section class="category">
+    <div class="categories_list" out:slide>
+        <ul>
+            {#each categoryService.items as category, i}
+                <li transition:slide>
+                    <a href="category_item/{category.id}">
+                        { category.name }
+                    </a>
+                    <button class="edit_item_btn" on:click={() => handleSubmit(category.id, category.name)}><i class="material-icons">edit</i></button>
+
+                    {#if category.visible}
+                        <span class="edit_box">
+                            <input type="text" bind:value={category.name}>
+                            <ButtonApply on:click={handleSubmit(category.id, category.name)}><i class="material-icons">check</i></ButtonApply>
+                        </span>
+                    {/if}
+
+                    <button 
+                        class="delete_item_btn"
+                        on:click={removeCategory(category.id)}><i class="material-icons">close</i></button>
+                </li>
+            {:else} 
+                <li class="need_more">Добавьте категорию</li>
+            {/each}
+        </ul>
+
+        <div class="add_category">
+            <div class="inp_wrap">
+                <!-- <input type="text" bind:value={ customCategoryName } placeholder="Введите название категории"> -->
+                <InputText pholder="Введите название категории" bind:inpValue={ customCategoryName } />
+                {#if customCategoryName.length > 0}
+                    <i class="material-icons" on:click={clearInput}>close</i>
+                {/if}
+            </div>
+            <ButtonApply on:click={ addCategory } >Добавить</ButtonApply>
+        </div>
+    </div>
+</section>
+
 <style lang="scss">
     .category {
         display: flex;
@@ -87,47 +134,29 @@
         display: flex;
         padding: 10px 20px;
         align-items: center;
-        input {
-            padding: 12px 7px;
-            background: #26282f;
-            color: #fff;
-            font-size: 13px;
-            border: 0;
-            width: 100%;
-            border-radius: 2px;
-            transition: .2s;
-            outline: 0;
-            &::placeholder{
-                font-style: italic;
-                font-size: 13px;
-            }
+        // input {
+        //     padding: 12px 7px;
+        //     background: #26282f;
+        //     color: #fff;
+        //     font-size: 13px;
+        //     border: 0;
+        //     width: 100%;
+        //     border-radius: 2px;
+        //     transition: .2s;
+        //     outline: 0;
+        //     &::placeholder{
+        //         font-style: italic;
+        //         font-size: 13px;
+        //     }
 
-            &:hover {
-                box-shadow: 0 0 1px 1px rgba(55, 239, 186, .5);
-            }
+        //     &:hover {
+        //         box-shadow: 0 0 1px 1px rgba(55, 239, 186, .5);
+        //     }
 
-            &:focus, &:active {
-                box-shadow: 0 0 1px 1px rgba(55, 239, 186, 1);
-            }
-        }
-
-        button {
-            color: #a3a3a3;
-            border: 0;
-            background: transparent;
-            border-radius: 2px;
-            display: block;
-            font-size: 13px;
-            padding: 10px 15px;
-            outline: 0;
-            cursor: pointer;
-            border: 1px solid #a3a3a3;
-            transition: .2s;
-            &:hover{
-                color: rgba(55, 239, 186, .7);
-                border-color: #fff;
-            }
-        }
+        //     &:focus, &:active {
+        //         box-shadow: 0 0 1px 1px rgba(55, 239, 186, 1);
+        //     }
+        // }
     }
 
     .inp_wrap{
@@ -181,6 +210,7 @@
         position: absolute;
         top: 8px;
         display: flex;
+        font-size: 14px;
         input {
             padding: 12px 7px 12px 0;
             background: #26282f;
@@ -197,66 +227,10 @@
             }
         }
 
-        button {
-            padding: 6px 10px;
-            height: 100%;
-            background: transparent;
-            border-radius: 2px;
-            color: #fff;
-            border: 1px solid #fff;
-            opacity: .5;
-            cursor: pointer;
-            transition: .2s;
-            &:hover{
-                opacity: 1;
-                color: rgba(55, 239, 186, 1); 
-            }
+        i {
+            font-size: 12px;
         }
     }
 
     
 </style>
-
-<svelte:head>
-	<title>Категории</title>
-</svelte:head>
-
-
-<section class="category">
-    <div class="categories_list" out:slide>
-        <ul>
-            {#each categoryService.items as category, i}
-                <li transition:slide>
-                    <a href="category_item/{category.id}">
-                        { category.name }
-                    </a>
-                    <button class="edit_item_btn" on:click={() => handleSubmit(category.id, category.name)}><i class="material-icons">edit</i></button>
-
-                    {#if category.visible}
-                        <span class="edit_box">
-                            <input type="text" bind:value={category.name}>
-                            <button type="submit" on:click={handleSubmit(category.id, category.name)}><i class="material-icons">check</i></button>
-                        </span>
-                    {/if}
-
-                    <button 
-                        class="delete_item_btn"
-                        on:click={removeCategory(category.id)}><i class="material-icons">close</i></button>
-                </li>
-            {:else} 
-                <li class="need_more">Добавьте категорию</li>
-            {/each}
-        </ul>
-
-        <div class="add_category">
-            <div class="inp_wrap">
-                <input type="text" bind:value={ customCategoryName } placeholder="Введите название категории">
-                {#if customCategoryName.length > 0}
-                    <i class="material-icons" on:click={clearInput}>close</i>
-                {/if}
-            </div>
-            <button on:click={ addCategory }>Добавить</button>
-        </div>
-    </div>
-</section>
-
