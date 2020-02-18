@@ -17,11 +17,10 @@
     let categoryItemService = new CategoryItemService();
 
     let { id, name, visible } = categoryService.getElem(idPage);
-    let bankAcc = JSON.parse(localStorage.getItem('accounts'));
 
     let moneyValue = '';
     let commentValue = '';
-    let selectedAccount = '3';
+    let selectedAccount = '';
 
     let items = categoryItemService.get({categoryId: idPage});
 
@@ -30,7 +29,10 @@
             return;
         } else if (commentValue === '') {
             commentValue = '<Без комментария>'
-        };
+        } else if (selectedAccount === '') {
+            alert('Выберите счет');
+            return;
+        }
 
         categoryItemService.addOperationItem(commentValue, moneyValue, idPage, selectedAccount);
 
@@ -49,7 +51,6 @@
         items = categoryItemService.get({categoryId: idPage});
     }
 
-    console.log(selectedAccount)
 
 </script>
 
@@ -61,7 +62,8 @@
     <h1>{name}</h1>
     <div class="page_top_inp">
         <input type="number" placeholder="введите сумму" bind:value={moneyValue}>
-        <BankAccountSelect bind:selectValue={selectedAccount}/>
+        <BankAccountSelect bind:selectValue={ selectedAccount } />
+
     </div>
     <textarea placeholder="Комментарий" bind:value={commentValue}></textarea>
     <ButtonApply on:click={addItem}>Добавить</ButtonApply>
@@ -74,7 +76,9 @@
                     class:minus={operation.operationValue < 0} 
                     in:slide out:slide>
 
-                    <div class="money_item-value">{ operation.operationValue } ({selectedAccount})</div>
+                    <div class="money_item-value">
+                        { operation.operationValue } ({operation.bankAccount})
+                    </div>
                     <div class="money_item-comment">{ operation.operationName }</div>
                     <button class="remove_item"
                         on:click={ removeItem(operation.id) }><i class="material-icons">close</i></button>

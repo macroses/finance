@@ -2,13 +2,13 @@
     import { setContext } from 'svelte';
  
     let bankAcc = JSON.parse(localStorage.getItem('accounts'));
-    console.log(bankAcc)
     export let selectValue;
 </script>
 
 <select bind:value={selectValue}>
+    <option selected >Выберите счет</option>
     {#each bankAcc as item, i}
-        <option value={item.id}>{item.accName}</option>
+        <option value={item.accName}>{item.accName}</option>
     {/each}
 </select>
 
@@ -19,8 +19,8 @@
         background: #26282f;
         color: #fff;
         font-size: 13px;
+        width: 200px;
         border: 0;
-        width: 100%;
         border-radius: 2px;
         transition: .2s;
         outline: 0;
