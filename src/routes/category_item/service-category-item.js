@@ -39,7 +39,7 @@ export default class CategoryItemService {
         this._writeLocalStorage(this.items);
     }
 
-    addOperationItem (name, value, pageId) {
+    addOperationItem (name, value, pageId, account) {
         let elem = this.items[this.items.length - 1];
 
         if(elem === undefined) {
@@ -47,9 +47,10 @@ export default class CategoryItemService {
         };
 
         let newObj = {
-            id            : elem.id === undefined ? 1 : elem.id + 1,
+            id            : elem.id === undefined ? 1: elem.id + 1,
             operationName : name,
             operationValue: value,
+            bankAccount   : account,
             visibleEdit   : false,
             categoryId    : pageId
         };

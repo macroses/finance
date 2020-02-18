@@ -10,25 +10,20 @@
     import CategoryService from '../../service-finance';
     import CategoryItemService from './service-category-item.js';
     import BankAccountSelect from '../../components/BankAccaunt.svelte';
+    import ButtonApply from '../../components/UI/ButtonApply.svelte';
 
     export let idPage;
     let categoryService = new CategoryService();
     let categoryItemService = new CategoryItemService();
 
     let { id, name, visible } = categoryService.getElem(idPage);
+    let bankAcc = JSON.parse(localStorage.getItem('accounts'));
 
     let moneyValue = '';
     let commentValue = '';
+    let selectedAccount = '3';
 
     let items = categoryItemService.get({categoryId: idPage});
-    
-    // валидация цифрового инпута
-    function onlydigits(node) {
-        // function clean_value(){
-        //     node.value = node.value.replace(/[^\d]/g,'');
-        // }
-        // node.addEventListener('input',clean_value);
-    }
 
     const addItem = () => {
         if(moneyValue === '') {
@@ -37,7 +32,7 @@
             commentValue = '<Без комментария>'
         };
 
-        categoryItemService.addOperationItem(commentValue, moneyValue, idPage);
+        categoryItemService.addOperationItem(commentValue, moneyValue, idPage, selectedAccount);
 
         items = categoryItemService.get({categoryId: idPage});
         moneyValue = '';
@@ -54,6 +49,8 @@
         items = categoryItemService.get({categoryId: idPage});
     }
 
+    console.log(selectedAccount)
+
 </script>
 
 <svelte:head>
@@ -62,10 +59,12 @@
 
 <div class="page-wrap" in:scale="{{duration: 500, opacity: 0.5, start: 0}}" out:slide>
     <h1>{name}</h1>
-    <input type="number" placeholder="введите сумму" bind:value={moneyValue} use:onlydigits>
-    <BankAccountSelect />
+    <div class="page_top_inp">
+        <input type="number" placeholder="введите сумму" bind:value={moneyValue}>
+        <BankAccountSelect bind:selectValue={selectedAccount}/>
+    </div>
     <textarea placeholder="Комментарий" bind:value={commentValue}></textarea>
-    <button class="add_item" on:click={addItem}>Добавить</button>
+    <ButtonApply on:click={addItem}>Добавить</ButtonApply>
 
     {#if items.length > 0}
         <div class="description">Список операций</div>
@@ -75,7 +74,7 @@
                     class:minus={operation.operationValue < 0} 
                     in:slide out:slide>
 
-                    <div class="money_item-value">{ operation.operationValue }</div>
+                    <div class="money_item-value">{ operation.operationValue } ({selectedAccount})</div>
                     <div class="money_item-comment">{ operation.operationName }</div>
                     <button class="remove_item"
                         on:click={ removeItem(operation.id) }><i class="material-icons">close</i></button>
@@ -90,7 +89,6 @@
                     {#if operation.visibleEdit}
                         <div class="edit_operation_box" transition:slide>
                             <input type="number" 
-                                use:onlydigits 
                                 bind:value={operation.operationValue}>
                             <textarea 
                                 bind:value={operation.operationName}></textarea>
@@ -111,6 +109,11 @@
 </div>
 
 <style lang="scss">
+    .page_top_inp {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
     .page-wrap {
         padding: 0 20px;
     }
@@ -158,7 +161,7 @@
     }
 
     input[type=number], textarea {
-        margin-bottom: 10px;
+        margin-right: 10px;
         padding: 12px 7px;
         background: #26282f;
         color: #fff;
@@ -227,24 +230,6 @@
         font-size: 30px;
         margin: 20px 0 10px;
         text-align: center;
-    }
-
-    .add_item{
-        color: #a3a3a3;
-        border: 0;
-        background: transparent;
-        border-radius: 2px;
-        display: block;
-        font-size: 13px;
-        padding: 10px 15px;
-        outline: 0;
-        cursor: pointer;
-        border: 1px solid #a3a3a3;
-        transition: .2s;
-        &:hover{
-            color: rgba(55, 239, 186, .7);
-            border-color: #fff;
-        }
     }
 
     .remove_item {
