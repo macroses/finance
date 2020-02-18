@@ -25,8 +25,8 @@ export default class AccountService {
         let elem = this.items.filter(e => e.id === id);
 
         elem[0].visibleEdit = !elem[0].visibleEdit;
-        elem[0].accName = value;
-        elem[0].accValue = name;
+        elem[0].accName = name;
+        elem[0].accValue = value;
 
         this.items = this.items;
         this._writeLocalStorage(this.items);

@@ -1,6 +1,8 @@
 <script>
     import {fly, slide, fade} from 'svelte/transition';
     import AccountService from '../service-acc';
+    import ButtonApply from '../components/UI/ButtonApply.svelte';
+    import InputText from '../components/UI/InputText.svelte';
 
     let accountName = '';
     let accountValue = '';
@@ -42,18 +44,24 @@
     <div class="create_account_box">
         <input type="text" placeholder="Введите название счета" bind:value={ accountName }>
         <input type="number" placeholder="Количество средств на счете" bind:value={ accountValue }>
-        <button on:click={ addAccItem }>Добавить</button>
+        <ButtonApply on:click={ addAccItem }>Добавить</ButtonApply>
     </div>
     <ul class="accounts_list">
         {#each accountItems as item}
             <li>
                 <div class="account_name">{ item.accName }</div>
                 <div class="account_value">{ item.accValue }</div>
-                <button on:click={ editAccItem(item.id, item.accName, item.accValue) }>edit</button>
-                <button on:click={ removeAccItem(item.id) }>remove</button>
+                <div class="control_box">
+                    <button class="edit" on:click={ editAccItem(item.id, item.accName, item.accValue) }><i class="material-icons">edit</i></button>
+                    <button class="remove" on:click={ removeAccItem(item.id) }><i class="material-icons">close</i></button>
+                </div>
 
                 {#if item.visibleEdit}
-                    <p>123123</p>
+                    <div class="edit_box">
+                        <InputText bind:newValue={ item.accName } pholder />
+                        <input type="number" bind:value={ item.accValue } />
+                        <ButtonApply on:click={ editAccItem(item.id, item.accName, item.accValue) } ><i class="material-icons">check</i></ButtonApply>
+                    </div>
                 {/if}
             </li>
         {/each}
@@ -69,17 +77,19 @@
     .accounts_list{
         li {
             display: flex;
-            justify-content: space-between;
             font-size: 16px;
             padding: 30px 0 10px;
+            position: relative;
         }
     }
 
     .account_name {
         font-weight: bold;
+        margin-right: 20px;
     }
     .account_value {
         color: lightgreen;
+        margin-right: 120px;
     }
 
     .create_account_box {
@@ -109,23 +119,30 @@
                 box-shadow: 0 0 1px 1px rgba(55, 239, 186, 1);
             }
         }
+    }
 
+    .control_box {
+        position: absolute;
+        right: -13px;
+        top: 27px;
         button {
+            display: inline-block;
+            width: 40px;
+            height: 100%;
+            z-index: 2;
+            background-color: transparent;
             color: #a3a3a3;
             border: 0;
-            background: transparent;
-            border-radius: 2px;
-            display: block;
-            font-size: 13px;
-            padding: 10px 15px;
             outline: 0;
             cursor: pointer;
-            border: 1px solid #a3a3a3;
-            transition: .2s;
             &:hover{
-                color: rgba(55, 239, 186, .7);
-                border-color: #fff;
+                color: #fff;
             }
         }
+    }
+
+    .edit_box {
+        position: absolute;
+        display: flex;
     }
 </style>

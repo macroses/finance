@@ -69,7 +69,7 @@
 
                     {#if category.visible}
                         <span class="edit_box">
-                            <input type="text" bind:value={category.name}>
+                            <InputText bind:newValue={category.name} pholder />
                             <ButtonApply on:click={handleSubmit(category.id, category.name)}><i class="material-icons">check</i></ButtonApply>
                         </span>
                     {/if}
@@ -85,8 +85,7 @@
 
         <div class="add_category">
             <div class="inp_wrap">
-                <!-- <input type="text" bind:value={ customCategoryName } placeholder="Введите название категории"> -->
-                <InputText pholder="Введите название категории" bind:inpValue={ customCategoryName } />
+                <InputText pholder="Введите название категории" bind:newValue={customCategoryName} />
                 {#if customCategoryName.length > 0}
                     <i class="material-icons" on:click={clearInput}>close</i>
                 {/if}
@@ -134,29 +133,6 @@
         display: flex;
         padding: 10px 20px;
         align-items: center;
-        // input {
-        //     padding: 12px 7px;
-        //     background: #26282f;
-        //     color: #fff;
-        //     font-size: 13px;
-        //     border: 0;
-        //     width: 100%;
-        //     border-radius: 2px;
-        //     transition: .2s;
-        //     outline: 0;
-        //     &::placeholder{
-        //         font-style: italic;
-        //         font-size: 13px;
-        //     }
-
-        //     &:hover {
-        //         box-shadow: 0 0 1px 1px rgba(55, 239, 186, .5);
-        //     }
-
-        //     &:focus, &:active {
-        //         box-shadow: 0 0 1px 1px rgba(55, 239, 186, 1);
-        //     }
-        // }
     }
 
     .inp_wrap{
@@ -211,21 +187,6 @@
         top: 8px;
         display: flex;
         font-size: 14px;
-        input {
-            padding: 12px 7px 12px 0;
-            background: #26282f;
-            color: #fff;
-            border: 0;
-            margin-right: 10px;
-
-            &:hover {
-                box-shadow: 0 0 1px 1px rgba(55, 239, 186, .5);
-            }
-
-            &:focus, &:active {
-                box-shadow: 0 0 1px 1px rgba(55, 239, 186, 1);
-            }
-        }
 
         i {
             font-size: 12px;

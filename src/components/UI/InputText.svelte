@@ -1,9 +1,11 @@
 <script>
+    import {createEventDispatcher} from 'svelte';
+
     export let pholder;
-    export let inpValue;
+    export let newValue;
 </script>
 
-<input type="text" placeholder={pholder} value={inpValue}>
+<input type="text" placeholder={pholder} bind:value={newValue}>
 
 <style lang="scss">
     input {

@@ -1,12 +1,14 @@
 <script>
     import Graph from '../components/Graph.svelte';
     import {fly, slide, fade} from 'svelte/transition';
+
+    export let sumArrFromStore = JSON.parse(localStorage.getItem('accounts')).map(a => parseInt(a.accValue)).reduce((a, b) => a + b);
 </script>
 
 <header out:slide>
     <Graph />
     <div class="header_box">
-        <div class="total_sum"><i class="material-icons">attach_money</i>86540</div>
+        <div class="total_sum"><i class="material-icons">attach_money</i>{sumArrFromStore}</div>
         <div class="main_data">
             <div class="main_data_item">
                 <div class="title">Доход</div>
