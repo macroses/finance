@@ -46,8 +46,8 @@
         items = categoryItemService.get({categoryId: idPage});
     }
 
-    const editItem = (id, value, name) => {
-        categoryItemService.editOperationItem(id, value, name);
+    const editItem = (id, value, name, account) => {
+        categoryItemService.editOperationItem(id, value, name, account);
         items = categoryItemService.get({categoryId: idPage});
     }
 
@@ -87,7 +87,8 @@
                         editItem(
                             operation.id, 
                             operation.operationValue, 
-                            operation.operationName
+                            operation.operationName,
+                            operation.bankAccount
                         )}><i class="material-icons">edit</i></button>
                     
                     {#if operation.visibleEdit}
@@ -96,11 +97,13 @@
                                 bind:value={operation.operationValue}>
                             <textarea 
                                 bind:value={operation.operationName}></textarea>
+                            <BankAccountSelect bind:selectValue={ operation.bankAccount } />
                             <button type="submit" on:click={
                                 editItem(
                                     operation.id, 
                                     operation.operationValue, 
-                                    operation.operationName
+                                    operation.operationName,
+                                    operation.bankAccount
                                 )}><i class="material-icons">check</i></button>
                         </div>
                     {/if}

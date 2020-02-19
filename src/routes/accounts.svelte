@@ -3,11 +3,13 @@
     import AccountService from '../service-acc';
     import ButtonApply from '../components/UI/ButtonApply.svelte';
     import InputText from '../components/UI/InputText.svelte';
+    // import OperationWithAccaunt from '../components/OperationWIthAccount.svelte';
 
     let accountName = '';
     let accountValue = '';
     let accountService = new AccountService();
     let accountItems = accountService.items;
+    let operationsFromAcc = false;
 
     const addAccItem = () => {
         if (accountName === '') {
@@ -34,6 +36,13 @@
         accountItems = accountService.get();
     }
 
+    // операции связанные с определнным счетом
+    let operationsNameArr = JSON.parse(localStorage.getItem('operations'));
+
+    const onShowOperations = (e) => {
+        operationsFromAcc = !operationsFromAcc;
+    }
+
 </script>
 
 <svelte:head>
@@ -48,9 +57,10 @@
     </div>
     <ul class="accounts_list">
         {#each accountItems as item}
-            <li>
+            <li on:click={onShowOperations}>
                 <div class="account_name">{ item.accName }</div>
                 <div class="account_value">{ item.accValue }</div>
+                <i class="material-icons">arrow_drop_down</i>
                 <div class="control_box">
                     <button class="edit" on:click={ editAccItem(item.id, item.accName, item.accValue) }><i class="material-icons">edit</i></button>
                     <button class="remove" on:click={ removeAccItem(item.id) }><i class="material-icons">close</i></button>
@@ -63,6 +73,17 @@
                         <ButtonApply on:click={ editAccItem(item.id, item.accName, item.accValue) } ><i class="material-icons">check</i></ButtonApply>
                     </div>
                 {/if}
+
+                <!-- список операций привязанный к конкретному счету -->
+                {#if operationsFromAcc}
+                    <h4>Последние 5 операций по счету "{item.accName}"</h4>
+                    <ul transition:slide>
+                        {#each operationsNameArr.filter(e => e.bankAccount === item.accName) as concatArraysitem, i}
+                            <li> {concatArraysitem.operationName} </li>
+                        {/each}
+                    </ul>
+                {/if}
+
             </li>
         {/each}
     </ul>
@@ -78,8 +99,10 @@
         li {
             display: flex;
             font-size: 16px;
+            align-items: center;
             padding: 30px 0 10px;
             position: relative;
+            cursor: pointer;
         }
     }
 
@@ -89,7 +112,7 @@
     }
     .account_value {
         color: lightgreen;
-        margin-right: 120px;
+        margin-right: 20px;
     }
 
     .create_account_box {

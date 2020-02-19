@@ -28,12 +28,13 @@ export default class CategoryItemService {
         this._writeLocalStorage(this.items);
     }
 
-    editOperationItem (id, value, name) {
+    editOperationItem (id, value, name, account) {
         let elem = this.items.filter(e => e.id === id);
 
         elem[0].visibleEdit = !elem[0].visibleEdit;
         elem[0].operationValue = value;
         elem[0].operationName = name;
+        elem[0].bankAccount = account;
 
         this.items = this.items;
         this._writeLocalStorage(this.items);
