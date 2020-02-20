@@ -1,6 +1,7 @@
 export default class AccountService {
     constructor() {
         this.items = JSON.parse(localStorage.getItem('accounts'));
+        this.operations = JSON.parse(localStorage.getItem('operations'));
 
         this._writeLocalStorage = (arr) => {
             localStorage.setItem('accounts', JSON.stringify(arr));
@@ -43,7 +44,8 @@ export default class AccountService {
             id            : elem.id === undefined ? 1 : elem.id + 1,
             accName : name,
             accValue: value,
-            visibleEdit   : false
+            visibleEdit   : false,
+            operationAccVisible: false
         };
 
         this.items = [...this.items, newObj];

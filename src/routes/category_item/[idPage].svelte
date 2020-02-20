@@ -20,7 +20,7 @@
 
     let moneyValue = '';
     let commentValue = '';
-    let selectedAccount = '';
+    $: selectedAccount = '';
 
     let items = categoryItemService.get({categoryId: idPage});
 
@@ -34,7 +34,7 @@
             return;
         }
 
-        categoryItemService.addOperationItem(commentValue, moneyValue, idPage, selectedAccount);
+        categoryItemService.addOperationItem(commentValue, moneyValue, idPage, selectedAccount, name);
 
         items = categoryItemService.get({categoryId: idPage});
         moneyValue = '';

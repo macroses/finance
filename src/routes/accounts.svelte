@@ -39,8 +39,9 @@
     // операции связанные с определнным счетом
     let operationsNameArr = JSON.parse(localStorage.getItem('operations'));
 
-    const onShowOperations = (e) => {
-        operationsFromAcc = !operationsFromAcc;
+    const showOperation = (e) => {
+        e.operationAccVisible = !e.operationAccVisible;
+        accountItems = accountService.get();
     }
 
 </script>
@@ -57,31 +58,42 @@
     </div>
     <ul class="accounts_list">
         {#each accountItems as item}
-            <li on:click={onShowOperations}>
-                <div class="account_name">{ item.accName }</div>
-                <div class="account_value">{ item.accValue }</div>
-                <i class="material-icons">arrow_drop_down</i>
-                <div class="control_box">
-                    <button class="edit" on:click={ editAccItem(item.id, item.accName, item.accValue) }><i class="material-icons">edit</i></button>
-                    <button class="remove" on:click={ removeAccItem(item.id) }><i class="material-icons">close</i></button>
-                </div>
-
-                {#if item.visibleEdit}
-                    <div class="edit_box">
-                        <InputText bind:newValue={ item.accName } pholder />
-                        <input type="number" bind:value={ item.accValue } />
-                        <ButtonApply on:click={ editAccItem(item.id, item.accName, item.accValue) } ><i class="material-icons">check</i></ButtonApply>
+            <li>
+                <div class="main_item_content">
+                    <div class="account_name">{ item.accName }</div>
+                    <div class="account_value">{ item.accValue }</div>
+                    <i class="material-icons" on:click={showOperation(item)}>arrow_drop_down</i>
+                    <div class="control_box">
+                        <button class="edit" on:click={ editAccItem(item.id, item.accName, item.accValue) }><i class="material-icons">edit</i></button>
+                        <button class="remove" on:click={ removeAccItem(item.id) }><i class="material-icons">close</i></button>
                     </div>
-                {/if}
 
+                    {#if item.visibleEdit}
+                        <div class="edit_box">
+                            <InputText bind:newValue={ item.accName } pholder />
+                            <input type="number" bind:value={ item.accValue } />
+                            <ButtonApply on:click={ editAccItem(item.id, item.accName, item.accValue) } ><i class="material-icons">check</i></ButtonApply>
+                        </div>
+                    {/if}
+                </div>
                 <!-- список операций привязанный к конкретному счету -->
-                {#if operationsFromAcc}
-                    <h4>Последние 5 операций по счету "{item.accName}"</h4>
-                    <ul transition:slide>
-                        {#each operationsNameArr.filter(e => e.bankAccount === item.accName) as concatArraysitem, i}
-                            <li> {concatArraysitem.operationName} </li>
-                        {/each}
-                    </ul>
+                {#if item.operationAccVisible}
+                    <div class="additional_info" transition:slide>
+                        <h4>Последние 5 операций по счету "{item.accName}"</h4>
+                        <ul>
+                            {#each operationsNameArr.filter(e => e.bankAccount === item.accName) as concatArraysitem, i}
+                                <li>
+                                    <div class="category_name">
+                                        {concatArraysitem.operationCategoryName}
+                                        <span class="operation_value">
+                                            {concatArraysitem.operationValue}
+                                        </span>
+                                    </div>
+                                    <div class="operation_comment">{concatArraysitem.operationName}</div>
+                                </li>
+                            {/each}
+                        </ul>
+                    </div>
                 {/if}
 
             </li>
@@ -95,15 +107,41 @@
         color: #fff;
     }
 
+    .category_name {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .operation_value {
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: lightpink;
+    }
+
+    .operation_comment {
+        font-style: italic;
+        color: #a3a3a3;
+    }
+
     .accounts_list{
         li {
             display: flex;
+            flex-direction: column;
+
             font-size: 16px;
-            align-items: center;
+            align-items: flex-start;
+            justify-content: center;
             padding: 30px 0 10px;
             position: relative;
-            cursor: pointer;
+            i {
+                cursor: pointer;
+            }
         }
+    }
+
+    .main_item_content {
+        display: flex;
+        align-items: center;
     }
 
     .account_name {
@@ -167,5 +205,21 @@
     .edit_box {
         position: absolute;
         display: flex;
+    }
+
+    .additional_info {
+        margin-top: 10px;
+        width: 100%;
+        h4 {
+            font-size: 14px;
+            color: #a3a3a3;
+            margin-left: 20px;
+        }
+
+        ul {
+            margin-left: 40px;
+            margin-right: 20px;
+            border-bottom: 1px solid gray;
+        }
     }
 </style>
