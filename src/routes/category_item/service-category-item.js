@@ -1,6 +1,7 @@
 export default class CategoryItemService {
     constructor() {
         this.items = JSON.parse(localStorage.getItem('operations'));
+        this.accounts = JSON.parse(localStorage.getItem('accounts'));
 
         this._writeLocalStorage = (arr) => {
             localStorage.setItem('operations', JSON.stringify(arr));

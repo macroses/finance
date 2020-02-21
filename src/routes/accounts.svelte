@@ -11,6 +11,9 @@
     let accountItems = accountService.items;
     let operationsFromAcc = false;
 
+    // операции связанные с определнным счетом
+    let operationsNameArr = JSON.parse(localStorage.getItem('operations'));
+
     const addAccItem = () => {
         if (accountName === '') {
             return;
@@ -29,6 +32,10 @@
     const editAccItem = (id, name, value) => {
         accountService.editAccountItem(id, name, value);
         accountItems = accountService.get();
+
+        // localStorage.setItem('operations', JSON.stringify(operationsNameArr.filter(e => e.bankAccount === value))); запомнить
+        // записывать имя счета из "аккаунтах"  в массив операций....как то
+        console.log(operationsNameArr)
     }
 
     const removeAccItem = (id) => {
@@ -36,9 +43,7 @@
         accountItems = accountService.get();
     }
 
-    // операции связанные с определнным счетом
-    let operationsNameArr = JSON.parse(localStorage.getItem('operations'));
-
+    
     const showOperation = (e) => {
         e.operationAccVisible = !e.operationAccVisible;
         accountItems = accountService.get();
@@ -62,7 +67,7 @@
                 <div class="main_item_content">
                     <div class="account_name">{ item.accName }</div>
                     <div class="account_value">{ item.accValue }</div>
-                    <i class="material-icons" on:click={showOperation(item)}>arrow_drop_down</i>
+                    <i class="material-icons" on:click={ showOperation(item) }>arrow_drop_down</i>
                     <div class="control_box">
                         <button class="edit" on:click={ editAccItem(item.id, item.accName, item.accValue) }><i class="material-icons">edit</i></button>
                         <button class="remove" on:click={ removeAccItem(item.id) }><i class="material-icons">close</i></button>

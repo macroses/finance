@@ -22,6 +22,8 @@
     let commentValue = '';
     $: selectedAccount = '';
 
+    let bankAccArray = JSON.parse(localStorage.getItem('accounts'));
+
     let items = categoryItemService.get({categoryId: idPage});
 
     const addItem = () => {
@@ -48,6 +50,7 @@
 
     const editItem = (id, value, name, account) => {
         categoryItemService.editOperationItem(id, value, name, account);
+        
         items = categoryItemService.get({categoryId: idPage});
     }
 
