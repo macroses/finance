@@ -7,12 +7,18 @@
 
 <script>
     import {fly, slide, fade, scale} from 'svelte/transition';
+
     import CategoryService from '../../service-finance';
     import CategoryItemService from './service-category-item.js';
+    import AccountService from '../../service-acc.js'; 
+
     import BankAccountSelect from '../../components/BankAccaunt.svelte';
     import ButtonApply from '../../components/UI/ButtonApply.svelte';
 
     export let idPage;
+
+    let accountService = new AccountService();
+
     let categoryService = new CategoryService();
     let categoryItemService = new CategoryItemService();
 
@@ -54,7 +60,6 @@
         items = categoryItemService.get({categoryId: idPage});
     }
 
-
 </script>
 
 <svelte:head>
@@ -62,59 +67,63 @@
 </svelte:head>
 
 <div class="page-wrap" in:scale="{{duration: 500, opacity: 0.5, start: 0}}" out:slide>
-    <h1>{name}</h1>
-    <div class="page_top_inp">
-        <input type="number" placeholder="введите сумму" bind:value={moneyValue}>
-        <BankAccountSelect bind:selectValue={ selectedAccount } />
-
-    </div>
-    <textarea placeholder="Комментарий" bind:value={commentValue}></textarea>
-    <ButtonApply on:click={addItem}>Добавить</ButtonApply>
-
-    {#if items.length > 0}
-        <div class="description">Список операций</div>
-        <ul class="money_list">
-            {#each items as operation, i}
-                <li class="money_item plus" 
-                    class:minus={operation.operationValue < 0} 
-                    in:slide out:slide>
-
-                    <div class="money_item-value">
-                        { operation.operationValue } ({operation.bankAccount})
-                    </div>
-                    <div class="money_item-comment">{ operation.operationName }</div>
-                    <button class="remove_item"
-                        on:click={ removeItem(operation.id) }><i class="material-icons">close</i></button>
-
-                    <button class="edit_item" on:click={ 
-                        editItem(
-                            operation.id, 
-                            operation.operationValue, 
-                            operation.operationName,
-                            operation.bankAccount
-                        )}><i class="material-icons">edit</i></button>
-                    
-                    {#if operation.visibleEdit}
-                        <div class="edit_operation_box" transition:slide>
-                            <input type="number" 
-                                bind:value={operation.operationValue}>
-                            <textarea 
-                                bind:value={operation.operationName}></textarea>
-                            <BankAccountSelect bind:selectValue={ operation.bankAccount } />
-                            <button type="submit" on:click={
-                                editItem(
-                                    operation.id, 
-                                    operation.operationValue, 
-                                    operation.operationName,
-                                    operation.bankAccount
-                                )}><i class="material-icons">check</i></button>
-                        </div>
-                    {/if}
-                </li>
-            {/each}
-        </ul>
+    {#if accountService.items.length === 0}
+        <a href="accounts">Сначала добавьте счет</a>
     {:else}
-        <div class="description">Добавьте операцию</div>
+        <h1>{name}</h1>
+        <div class="page_top_inp">
+            <input type="number" placeholder="введите сумму" bind:value={moneyValue}>
+            <BankAccountSelect bind:selectValue={ selectedAccount } />
+
+        </div>
+        <textarea placeholder="Комментарий" bind:value={commentValue}></textarea>
+        <ButtonApply on:click={addItem}>Добавить</ButtonApply>
+
+        {#if items.length > 0}
+            <div class="description">Список операций</div>
+            <ul class="money_list">
+                {#each items as operation, i}
+                    <li class="money_item plus" 
+                        class:minus={operation.operationValue < 0} 
+                        in:slide out:slide>
+
+                        <div class="money_item-value">
+                            { operation.operationValue } ({operation.bankAccount})
+                        </div>
+                        <div class="money_item-comment">{ operation.operationName }</div>
+                        <button class="remove_item"
+                            on:click={ removeItem(operation.id) }><i class="material-icons">close</i></button>
+
+                        <button class="edit_item" on:click={ 
+                            editItem(
+                                operation.id, 
+                                operation.operationValue, 
+                                operation.operationName,
+                                operation.bankAccount
+                            )}><i class="material-icons">edit</i></button>
+                        
+                        {#if operation.visibleEdit}
+                            <div class="edit_operation_box" transition:slide>
+                                <input type="number" 
+                                    bind:value={operation.operationValue}>
+                                <textarea 
+                                    bind:value={operation.operationName}></textarea>
+                                <BankAccountSelect bind:selectValue={ operation.bankAccount } />
+                                <button type="submit" on:click={
+                                    editItem(
+                                        operation.id, 
+                                        operation.operationValue, 
+                                        operation.operationName,
+                                        operation.bankAccount
+                                    )}><i class="material-icons">check</i></button>
+                            </div>
+                        {/if}
+                    </li>
+                {/each}
+            </ul>
+        {:else}
+            <div class="description">Добавьте операцию</div>
+        {/if}
     {/if}
 </div>
 
@@ -126,6 +135,11 @@
 
     .page-wrap {
         padding: 0 20px;
+        a {
+            color: #fff;
+            padding: 20px 0;
+            display: inline-block;
+        }
     }
 
     .edit_operation_box{

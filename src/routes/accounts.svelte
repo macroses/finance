@@ -29,15 +29,6 @@
         accountValue = '';
     }
 
-    const editAccItem = (id, name, value) => {
-        accountService.editAccountItem(id, name, value);
-        accountItems = accountService.get();
-
-        // localStorage.setItem('operations', JSON.stringify(operationsNameArr.filter(e => e.bankAccount === value))); запомнить
-        // записывать имя счета из "аккаунтах"  в массив операций....как то
-        console.log(operationsNameArr)
-    }
-
     const removeAccItem = (id) => {
         accountService.removeAccountItem(id);
         accountItems = accountService.get();
@@ -69,17 +60,16 @@
                     <div class="account_value">{ item.accValue }</div>
                     <i class="material-icons" on:click={ showOperation(item) }>arrow_drop_down</i>
                     <div class="control_box">
-                        <button class="edit" on:click={ editAccItem(item.id, item.accName, item.accValue) }><i class="material-icons">edit</i></button>
                         <button class="remove" on:click={ removeAccItem(item.id) }><i class="material-icons">close</i></button>
                     </div>
 
-                    {#if item.visibleEdit}
+                    <!-- {#if item.visibleEdit}
                         <div class="edit_box">
                             <InputText bind:newValue={ item.accName } pholder />
                             <input type="number" bind:value={ item.accValue } />
                             <ButtonApply on:click={ editAccItem(item.id, item.accName, item.accValue) } ><i class="material-icons">check</i></ButtonApply>
                         </div>
-                    {/if}
+                    {/if} -->
                 </div>
                 <!-- список операций привязанный к конкретному счету -->
                 {#if item.operationAccVisible}
@@ -100,7 +90,6 @@
                         </ul>
                     </div>
                 {/if}
-
             </li>
         {/each}
     </ul>
