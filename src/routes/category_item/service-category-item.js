@@ -2,6 +2,8 @@ export default class CategoryItemService {
     constructor() {
         this.items = JSON.parse(localStorage.getItem('operations'));
         this.accounts = JSON.parse(localStorage.getItem('accounts'));
+        this.time = new Date();
+
 
         this._writeLocalStorage = (arr) => {
             localStorage.setItem('operations', JSON.stringify(arr));
@@ -41,7 +43,7 @@ export default class CategoryItemService {
         this._writeLocalStorage(this.items);
     }
 
-    addOperationItem (name, value, pageId, account, categoryName) {
+    addOperationItem (name, value, pageId, account, categoryName, positiveOperation) {
         let elem = this.items[this.items.length - 1];
 
         if(elem === undefined) {
@@ -52,11 +54,13 @@ export default class CategoryItemService {
             id                   : elem.id === undefined ? 1: elem.id + 1,
             operationName        : name,
             operationValue       : value,
-            positiveOperation    : false,
+            positiveOperation    : positiveOperation,
             bankAccount          : account,
             visibleEdit          : false,
             categoryId           : pageId,
-            operationCategoryName: categoryName
+            operationCategoryName: categoryName,
+            postDate             : `${this.time.getDate()}.${this.time.getMonth()}.${this.time.getFullYear()}`,
+            postTime             : `${this.time.getHours()}: ${this.time.getMinutes()}: ${this.time.getSeconds()}`
         };
 
         this.items = [...this.items, newObj];

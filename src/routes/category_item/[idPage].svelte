@@ -24,6 +24,8 @@
 
     let { id, name, visible } = categoryService.getElem(idPage);
 
+    let positiveOperation = false;
+
     let moneyValue = '';
     let commentValue = '';
     $: selectedAccount = '';
@@ -42,11 +44,14 @@
             return;
         }
 
-        categoryItemService.addOperationItem(commentValue, moneyValue, idPage, selectedAccount, name);
+        categoryItemService.addOperationItem(
+            commentValue, moneyValue, idPage, selectedAccount, name, positiveOperation
+        );
 
         items = categoryItemService.get({categoryId: idPage});
         moneyValue = '';
         commentValue = '';
+        positiveOperation = false;
     }
 
     const removeItem = (idOperation) => {
@@ -56,7 +61,6 @@
 
     const editItem = (id, value, name, account) => {
         categoryItemService.editOperationItem(id, value, name, account);
-        
         items = categoryItemService.get({categoryId: idPage});
     }
 
@@ -71,10 +75,15 @@
         <a href="accounts">Сначала добавьте счет</a>
     {:else}
         <h1>{name}</h1>
+
+        <label class="consumption">
+            <input type="checkbox" bind:checked={positiveOperation}>
+            <span>Доход</span>
+        </label>
+        
         <div class="page_top_inp">
             <input type="number" placeholder="введите сумму" bind:value={moneyValue}>
             <BankAccountSelect bind:selectValue={ selectedAccount } />
-
         </div>
         <textarea placeholder="Комментарий" bind:value={commentValue}></textarea>
         <ButtonApply on:click={addItem}>Добавить</ButtonApply>
@@ -84,13 +93,17 @@
             <ul class="money_list">
                 {#each items as operation, i}
                     <li class="money_item plus" 
-                        class:minus={operation.operationValue < 0} 
+                        class:minus={!operation.positiveOperation} 
                         in:slide out:slide>
 
                         <div class="money_item-value">
                             { operation.operationValue } ({operation.bankAccount})
                         </div>
                         <div class="money_item-comment">{ operation.operationName }</div>
+                        <div class="money_item-time">
+                            <span class="time">{ operation.postTime }</span>
+                            <span class="date">{ operation.postDate }</span>
+                        </div>
                         <button class="remove_item"
                             on:click={ removeItem(operation.id) }><i class="material-icons">close</i></button>
 
@@ -128,6 +141,44 @@
 </div>
 
 <style lang="scss">
+    .money_item-time {
+        color: #a3a3a3;
+        .time {
+            margin-right: 10px;
+        }
+    }
+
+    .consumption {
+        cursor: pointer;
+        display: block;
+        margin-bottom: 10px;
+        input {
+            display: none;
+        }
+
+        span {
+            display: flex;
+            align-items: center;
+            position: relative;
+            color: #fff;
+            margin-left: 5px;
+            &:before {
+                content: '\e835';
+                font-size: 20px;
+                font-family: 'Material Icons';
+                position: relative;
+                left: -5px;
+            }
+        }
+
+        input:checked + span:before {
+            content: '\e834';
+            font-size: 20px;
+            font-family: 'Material Icons';
+            color: rgba(55, 239, 186, 1);
+        }
+    }
+
     .page_top_inp {
         display: flex;
         margin-bottom: 10px;

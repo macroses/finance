@@ -3,13 +3,11 @@
     import AccountService from '../service-acc';
     import ButtonApply from '../components/UI/ButtonApply.svelte';
     import InputText from '../components/UI/InputText.svelte';
-    // import OperationWithAccaunt from '../components/OperationWIthAccount.svelte';
 
     let accountName = '';
     let accountValue = '';
     let accountService = new AccountService();
     let accountItems = accountService.items;
-    let operationsFromAcc = false;
 
     // операции связанные с определнным счетом
     let operationsNameArr = JSON.parse(localStorage.getItem('operations'));
@@ -53,23 +51,17 @@
         <ButtonApply on:click={ addAccItem }>Добавить</ButtonApply>
     </div>
     <ul class="accounts_list">
-        {#each accountItems as item}
-            <li>
+        {#each accountItems as item(item.id)}
+            <li transition:slide>
                 <div class="main_item_content">
                     <div class="account_name">{ item.accName }</div>
                     <div class="account_value">{ item.accValue }</div>
-                    <i class="material-icons" on:click={ showOperation(item) }>arrow_drop_down</i>
+                    {#if operationsNameArr.length > 0}
+                        <i class="material-icons" on:click={ showOperation(item) }>arrow_drop_down</i>
+                    {/if}
                     <div class="control_box">
                         <button class="remove" on:click={ removeAccItem(item.id) }><i class="material-icons">close</i></button>
                     </div>
-
-                    <!-- {#if item.visibleEdit}
-                        <div class="edit_box">
-                            <InputText bind:newValue={ item.accName } pholder />
-                            <input type="number" bind:value={ item.accValue } />
-                            <ButtonApply on:click={ editAccItem(item.id, item.accName, item.accValue) } ><i class="material-icons">check</i></ButtonApply>
-                        </div>
-                    {/if} -->
                 </div>
                 <!-- список операций привязанный к конкретному счету -->
                 {#if item.operationAccVisible}
@@ -80,9 +72,13 @@
                                 <li>
                                     <div class="category_name">
                                         {concatArraysitem.operationCategoryName}
-                                        <span class="operation_value">
+                                        
+                                        <span class="operation_value"
+                                            class:minus={!concatArraysitem.positiveOperation}>
                                             {concatArraysitem.operationValue}
                                         </span>
+
+                                        ({concatArraysitem.postDate})
                                     </div>
                                     <div class="operation_comment">{concatArraysitem.operationName}</div>
                                 </li>
@@ -109,7 +105,10 @@
     .operation_value {
         font-weight: bold;
         margin-bottom: 10px;
-        color: lightpink;
+        color: rgba(55, 239, 186, 1);
+        &.minus {
+            color: lightpink;
+        }
     }
 
     .operation_comment {
@@ -194,11 +193,6 @@
                 color: #fff;
             }
         }
-    }
-
-    .edit_box {
-        position: absolute;
-        display: flex;
     }
 
     .additional_info {
