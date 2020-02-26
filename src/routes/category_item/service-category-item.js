@@ -41,6 +41,9 @@ export default class CategoryItemService {
 
         this.items = this.items;
         this._writeLocalStorage(this.items);
+
+        this.accounts.map(e => e.accValue = e.accValue - value);
+        localStorage.setItem('accounts', JSON.stringify(this.accounts));
     }
 
     addOperationItem (name, value, pageId, account, categoryName, positiveOperation) {
@@ -64,8 +67,10 @@ export default class CategoryItemService {
         };
 
         this.items = [...this.items, newObj];
-
         this._writeLocalStorage(this.items);
+
+        this.accounts.map(e => e.accValue = e.accValue - value);
+        localStorage.setItem('accounts', JSON.stringify(this.accounts));
 
         return newObj;
     }

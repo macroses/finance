@@ -1,6 +1,7 @@
 <script>
     import {fly, slide, fade} from 'svelte/transition';
     import AccountService from '../service-acc';
+    import CategoryItemService from './category_item/service-category-item.js';
     import ButtonApply from '../components/UI/ButtonApply.svelte';
     import InputText from '../components/UI/InputText.svelte';
 

@@ -60,7 +60,7 @@
 <section class="category">
     <div class="categories_list" out:slide>
         <ul>
-            {#each categoryService.items as category, i}
+            {#each categoryService.items as category (category.id)}
                 <li transition:slide>
                     <a href="category_item/{category.id}">
                         { category.name }

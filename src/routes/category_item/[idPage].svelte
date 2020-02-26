@@ -18,7 +18,6 @@
     export let idPage;
 
     let accountService = new AccountService();
-
     let categoryService = new CategoryService();
     let categoryItemService = new CategoryItemService();
 
@@ -45,7 +44,12 @@
         }
 
         categoryItemService.addOperationItem(
-            commentValue, moneyValue, idPage, selectedAccount, name, positiveOperation
+            commentValue, 
+            moneyValue, 
+            idPage, 
+            selectedAccount, 
+            name, 
+            positiveOperation
         );
 
         items = categoryItemService.get({categoryId: idPage});
