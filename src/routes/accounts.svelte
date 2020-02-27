@@ -12,6 +12,9 @@
 
     // операции связанные с определнным счетом
     let operationsNameArr = JSON.parse(localStorage.getItem('operations'));
+    if (operationsNameArr === null) {
+        operationsNameArr = [];
+    }
 
     const addAccItem = () => {
         if (accountName === '') {
