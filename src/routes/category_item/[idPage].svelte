@@ -82,7 +82,11 @@
 
         <label class="consumption">
             <input type="checkbox" bind:checked={positiveOperation}>
-            <span>Доход</span>
+            <span class="title">Доход</span>
+            <span class="descr">
+                ?
+                <span class="descr_content">Операация по умолчанию - <span class="minus">"расход"</span>. Выберите <span class="plus">"доход"</span>, если вы получили какую-то прибыль (возврат денег, премия, подарок и пр.)</span>
+            </span>
         </label>
         
         <div class="page_top_inp">
@@ -154,13 +158,13 @@
 
     .consumption {
         cursor: pointer;
-        display: block;
+        display: flex;
         margin-bottom: 10px;
         input {
             display: none;
         }
 
-        span {
+        .title {
             display: flex;
             align-items: center;
             position: relative;
@@ -175,11 +179,54 @@
             }
         }
 
-        input:checked + span:before {
+        input:checked + .title:before {
             content: '\e834';
             font-size: 20px;
             font-family: 'Material Icons';
             color: rgba(55, 239, 186, 1);
+        }
+
+
+        .descr {
+            display: inline-block;
+            border: 1px solid #a3a3a3;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            position: relative;
+            margin-left: 10px;
+            font-size: 11px;
+            color: #fff;
+            text-align: center;
+            .plus {
+                color: green;
+            }
+
+            .minus {
+                color: red;
+            }
+
+            &:hover .descr_content {
+                display: block;
+            }
+        }
+
+        .descr_content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 250px;
+            border-radius: 4px;
+            background: #424250;
+            color: #a3a3a3;
+            padding: 10px;
+            border: 1px solid;
+            box-shadow: 2px 2px 10px 2px rgba(0,0,0, .5);
+            display: none;
+            font-size: 11px;
         }
     }
 

@@ -2,6 +2,7 @@
     import {fly, slide, fade, scale} from 'svelte/transition';
     import ButtonApply from '../components/UI/ButtonApply.svelte';
     import InputText from '../components/UI/InputText.svelte';
+    import IconList from '../components/UI/IconsList.svelte';
 
     import CategoryService from '../service-finance';
 
@@ -9,6 +10,7 @@
 
     let popularCategories  = [];
     let customCategoryName = '';
+    let icon = '';
 
     const clearInput = () => {
         customCategoryName = '';
@@ -16,9 +18,9 @@
 
     if(categoryService.items === null) {
         categoryService.items = [
-            {id: 1, name: 'Транспорт', visible: false},
-            {id: 2, name: 'Продукты', visible: false},
-            {id: 3, name: 'Здоровье', visible: false}
+            {id: 1, name: 'Транспорт', visible: false, icon: '#'+Math.random().toString(16).substr(-6)},
+            {id: 2, name: 'Продукты', visible: false, icon: '#'+Math.random().toString(16).substr(-6)},
+            {id: 3, name: 'Здоровье', visible: false, icon: '#'+Math.random().toString(16).substr(-6)}
         ];
         localStorage.setItem('arr', JSON.stringify(categoryService.items));
     }
@@ -34,8 +36,9 @@
             elem = 1;
         }
 
-        categoryService.items = categoryService.addItem(elem.id, customCategoryName);        
+        categoryService.items = categoryService.addItem(elem.id, customCategoryName, icon);        
         customCategoryName = '';
+        randomColor = '';
 
         localStorage.setItem('arr', JSON.stringify(categoryService.items));
     }
@@ -59,11 +62,23 @@
 
 <section class="category">
     <div class="categories_list" out:slide>
+        <div class="add_category">
+            <div class="inp_wrap">
+                <InputText pholder="Введите название категории" bind:newValue={customCategoryName} />
+                {#if customCategoryName.length > 0}
+                    <i class="material-icons" on:click={clearInput}>close</i>
+                {/if}
+            </div>
+            <button class="add_icon" title="Выберите иконку"><i class="material-icons">android</i></button>
+            <ButtonApply on:click={ addCategory } >Добавить</ButtonApply>
+        </div>
         <ul>
             {#each categoryService.items as category (category.id)}
                 <li transition:slide>
                     <a href="category_item/{category.id}">
+                        <div class="category_icon" style="background: {category.icon}"></div>
                         { category.name }
+                        <i class="material-icons">arrow_right</i>
                     </a>
                     <button class="edit_item_btn" on:click={() => handleSubmit(category.id, category.name)}><i class="material-icons">edit</i></button>
 
@@ -83,21 +98,35 @@
             {/each}
         </ul>
 
-        <div class="add_category">
-            <div class="inp_wrap">
-                <InputText pholder="Введите название категории" bind:newValue={customCategoryName} />
-                {#if customCategoryName.length > 0}
-                    <i class="material-icons" on:click={clearInput}>close</i>
-                {/if}
-            </div>
-            <ButtonApply on:click={ addCategory } >Добавить</ButtonApply>
-        </div>
+        
+        <IconList />
+
     </div>
 </section>
 
 <style lang="scss">
     .category {
         display: flex;
+    }
+
+    .add_icon {
+        cursor: pointer;
+        background: #a3a3a3;
+        display: inline-block;
+        height: 100%;
+        outline: 0;
+        margin-right: 10px;
+        i{
+            font-size: 20px;
+        }
+    }
+
+    .category_icon{
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        border: #a3a3a3;
+        margin-right: 10px;
     }
 
     .categories_list {
@@ -107,9 +136,10 @@
             background-color: #33333d;
             padding: 0 20px;
             a {
+                display: flex;
+                align-items: center;
                 color: #a3a3a3;
                 text-decoration: none;
-                display: block;
                 width: 100%;
                 height: 100%;
                 padding: 20px 0;
@@ -118,6 +148,10 @@
                 transition: .2s;
                 &:hover{
                     color: #fff;
+                }
+                i {
+                    margin-left: 10px;
+                    font-size: 15px;
                 }
             }
         }

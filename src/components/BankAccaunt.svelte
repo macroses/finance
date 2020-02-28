@@ -1,13 +1,16 @@
 <script>
-    import { setContext } from 'svelte';
- 
     $: bankAcc = JSON.parse(localStorage.getItem('accounts'));
     export let selectValue;
 </script>
 
 <select bind:value={selectValue}>
-    <option selected disabled>Выберите счет</option>
+    <option selected>{ bankAcc[0].accName }</option>
     {#each bankAcc as item, i}
+        {#if bankAcc.length >= 1}
+             <!-- content here -->
+        {:else}
+             <!-- else content here -->
+        {/if}
         <option value={item.accName}>{item.accName}</option>
     {/each}
 </select>
