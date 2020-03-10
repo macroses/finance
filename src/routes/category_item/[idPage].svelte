@@ -21,7 +21,7 @@
     let categoryService = new CategoryService();
     let categoryItemService = new CategoryItemService();
 
-    let { id, name, visible } = categoryService.getElem(idPage);
+    let { id, name, visible, icon } = categoryService.getElem(idPage);
 
     let positiveOperation = false;
 
@@ -63,8 +63,8 @@
         items = categoryItemService.get({categoryId: idPage});
     }
 
-    const editItem = (id, value, name, account) => {
-        categoryItemService.editOperationItem(id, value, name, account);
+    const editItem = (id, value, name, account, time, date) => {
+        categoryItemService.editOperationItem(id, value, name, account, time, date);
         items = categoryItemService.get({categoryId: idPage});
     }
 
@@ -78,7 +78,10 @@
     {#if accountService.items.length === 0}
         <a href="accounts">Сначала добавьте счет</a>
     {:else}
-        <h1>{name}</h1>
+        <h1>
+            {name}
+            <i class="material-icons">{icon}</i>
+        </h1>
 
         <label class="consumption">
             <input type="checkbox" bind:checked={positiveOperation}>
@@ -90,7 +93,7 @@
         </label>
         
         <div class="page_top_inp">
-            <input type="number" placeholder="введите сумму" bind:value={moneyValue}>
+            <input type="number"bind:value={moneyValue} placeholder="сумма">
             <BankAccountSelect bind:selectValue={ selectedAccount } />
         </div>
         <textarea placeholder="Комментарий" bind:value={commentValue}></textarea>
@@ -99,7 +102,7 @@
         {#if items.length > 0}
             <div class="description">Список операций</div>
             <ul class="money_list">
-                {#each items as operation, i}
+                {#each items as operation (operation.id)}
                     <li class="money_item plus" 
                         class:minus={!operation.positiveOperation} 
                         in:slide out:slide>
@@ -120,7 +123,9 @@
                                 operation.id, 
                                 operation.operationValue, 
                                 operation.operationName,
-                                operation.bankAccount
+                                operation.bankAccount,
+                                operation.postTime,
+                                operation.postDate
                             )}><i class="material-icons">edit</i></button>
                         
                         {#if operation.visibleEdit}
@@ -130,12 +135,15 @@
                                 <textarea 
                                     bind:value={operation.operationName}></textarea>
                                 <BankAccountSelect bind:selectValue={ operation.bankAccount } />
+                                <input type="date" value={operation.postDate}>
                                 <button type="submit" on:click={
                                     editItem(
                                         operation.id, 
                                         operation.operationValue, 
                                         operation.operationName,
-                                        operation.bankAccount
+                                        operation.bankAccount,
+                                        operation.postTime,
+                                        operation.postDate
                                     )}><i class="material-icons">check</i></button>
                             </div>
                         {/if}
@@ -227,13 +235,15 @@
             box-shadow: 2px 2px 10px 2px rgba(0,0,0, .5);
             display: none;
             font-size: 11px;
+            z-index: 2;
         }
     }
 
     .page_top_inp {
         display: flex;
         margin-bottom: 10px;
-    }
+        position: relative;
+    }       
 
     .page-wrap {
         padding: 0 20px;
@@ -284,6 +294,12 @@
     h1 {
         font-size: 30px;
         color: #ffffff;
+        display: flex;
+        align-items: center;
+        i {
+            display: inline-block;
+            margin-left: 20px;
+        }
     }
 
     input[type=number], textarea {

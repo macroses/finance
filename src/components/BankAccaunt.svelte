@@ -4,13 +4,8 @@
 </script>
 
 <select bind:value={selectValue}>
-    <option selected>{ bankAcc[0].accName }</option>
-    {#each bankAcc as item, i}
-        {#if bankAcc.length >= 1}
-             <!-- content here -->
-        {:else}
-             <!-- else content here -->
-        {/if}
+    <option selected>Выберите счет</option>
+    {#each bankAcc as item, i} 
         <option value={item.accName}>{item.accName}</option>
     {/each}
 </select>

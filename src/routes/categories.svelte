@@ -11,6 +11,9 @@
     let popularCategories  = [];
     let customCategoryName = '';
     let icon = '';
+    let iconVisible = false;
+    let iconsArr = new CategoryService().icons;
+    let chosenIcon = 'icon';
 
     const clearInput = () => {
         customCategoryName = '';
@@ -18,9 +21,9 @@
 
     if(categoryService.items === null) {
         categoryService.items = [
-            {id: 1, name: 'Транспорт', visible: false, icon: '#'+Math.random().toString(16).substr(-6)},
-            {id: 2, name: 'Продукты', visible: false, icon: '#'+Math.random().toString(16).substr(-6)},
-            {id: 3, name: 'Здоровье', visible: false, icon: '#'+Math.random().toString(16).substr(-6)}
+            {id: 1, name: 'Транспорт', visible: false, icon: 'directions_car'},
+            {id: 2, name: 'Продукты', visible: false, icon: 'local_dining'},
+            {id: 3, name: 'Здоровье', visible: false, icon: 'favorite'}
         ];
         localStorage.setItem('arr', JSON.stringify(categoryService.items));
     }
@@ -36,9 +39,8 @@
             elem = 1;
         }
 
-        categoryService.items = categoryService.addItem(elem.id, customCategoryName, icon);        
+        categoryService.items = categoryService.addItem(elem.id, customCategoryName, chosenIcon);        
         customCategoryName = '';
-        randomColor = '';
 
         localStorage.setItem('arr', JSON.stringify(categoryService.items));
     }
@@ -51,6 +53,14 @@
     const handleSubmit = (id, name) => {
         categoryService.items = categoryService.editItem(id, name);
         localStorage.setItem('arr', JSON.stringify(categoryService.items));
+    }
+
+    const showIcons = () => {
+        iconVisible = !iconVisible;
+    }
+
+    const currentIcon = (icon) => {
+        chosenIcon = icon;
     }
 
 </script>
@@ -69,14 +79,30 @@
                     <i class="material-icons" on:click={clearInput}>close</i>
                 {/if}
             </div>
-            <button class="add_icon" title="Выберите иконку"><i class="material-icons">android</i></button>
             <ButtonApply on:click={ addCategory } >Добавить</ButtonApply>
+            <div class="icon_container">
+                {#if iconVisible}
+                    <ul transition:slide>
+                        {#each iconsArr as iconItem}
+                            <li 
+                                class="material-icons"
+                                on:click={() => currentIcon(iconItem)} >
+                                {iconItem}
+                            </li>
+                        {/each}
+                    </ul>
+                {/if}
+                
+            </div>
+            <button on:click={showIcons}><i class="material-icons">{ chosenIcon }</i></button>
         </div>
         <ul>
             {#each categoryService.items as category (category.id)}
                 <li transition:slide>
                     <a href="category_item/{category.id}">
-                        <div class="category_icon" style="background: {category.icon}"></div>
+                        <div class="category_icon">
+                            <i class="material-icons">{ category.icon }</i>
+                        </div>
                         { category.name }
                         <i class="material-icons">arrow_right</i>
                     </a>
@@ -97,28 +123,23 @@
                 <li class="need_more">Добавьте категорию</li>
             {/each}
         </ul>
-
-        
-        <IconList />
-
     </div>
 </section>
 
 <style lang="scss">
-    .category {
-        display: flex;
+    .icon_container {
+        position: relative;
+
+        li {
+            cursor: pointer;
+            font-size: 30px;
+            color: #fff;
+            margin: 10px;
+        }
     }
 
-    .add_icon {
-        cursor: pointer;
-        background: #a3a3a3;
-        display: inline-block;
-        height: 100%;
-        outline: 0;
-        margin-right: 10px;
-        i{
-            font-size: 20px;
-        }
+    .category {
+        display: flex;
     }
 
     .category_icon{
@@ -126,7 +147,8 @@
         height: 20px;
         border-radius: 6px;
         border: #a3a3a3;
-        margin-right: 10px;
+        margin-right: 20px;
+        display: inline-block;
     }
 
     .categories_list {
@@ -151,7 +173,7 @@
                 }
                 i {
                     margin-left: 10px;
-                    font-size: 15px;
+                    font-size: 20px;
                 }
             }
         }
@@ -167,6 +189,7 @@
         display: flex;
         padding: 10px 20px;
         align-items: center;
+        flex-wrap: wrap;
     }
 
     .inp_wrap{
