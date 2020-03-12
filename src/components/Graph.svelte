@@ -10,7 +10,7 @@
     function createChart() {
         const ctx = document.getElementById('myChart');
         const myChart = new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: accounts.map(e => e.accName),
                 datasets: [{

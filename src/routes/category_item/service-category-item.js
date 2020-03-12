@@ -65,7 +65,7 @@ export default class CategoryItemService {
             categoryId           : pageId,
             operationCategoryName: categoryName,
             postDate             : `${this.time.getDate()}.${this.time.getMonth()}.${this.time.getFullYear()}`,
-            postTime             : `${this.time.getHours()}: ${this.time.getMinutes()}: ${this.time.getSeconds()}`
+            postTime             : `${this.time.getHours()}:${this.time.getMinutes()}:${this.time.getSeconds()}`
         };
 
         this.items = [...this.items, newObj];

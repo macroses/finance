@@ -13,7 +13,7 @@
     let icon = '';
     let iconVisible = false;
     let iconsArr = new CategoryService().icons;
-    let chosenIcon = 'icon';
+    let chosenIcon = '';
 
     const clearInput = () => {
         customCategoryName = '';
@@ -41,6 +41,7 @@
 
         categoryService.items = categoryService.addItem(elem.id, customCategoryName, chosenIcon);        
         customCategoryName = '';
+        chosenIcon = '';
 
         localStorage.setItem('arr', JSON.stringify(categoryService.items));
     }
@@ -79,6 +80,7 @@
                     <i class="material-icons" on:click={clearInput}>close</i>
                 {/if}
             </div>
+            <ButtonApply on:click={ showIcons } ><i class="material-icons icons">{ chosenIcon || 'Выберите иконку' }</i></ButtonApply>
             <ButtonApply on:click={ addCategory } >Добавить</ButtonApply>
             <div class="icon_container">
                 {#if iconVisible}
@@ -92,9 +94,7 @@
                         {/each}
                     </ul>
                 {/if}
-                
             </div>
-            <button on:click={showIcons}><i class="material-icons">{ chosenIcon }</i></button>
         </div>
         <ul>
             {#each categoryService.items as category (category.id)}
@@ -127,6 +127,10 @@
 </section>
 
 <style lang="scss">
+    .icons {
+        font-size: 11px;
+    }
+
     .icon_container {
         position: relative;
 

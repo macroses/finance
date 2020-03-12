@@ -100,21 +100,27 @@
         <ButtonApply on:click={addItem}>Добавить</ButtonApply>
 
         {#if items.length > 0}
-            <div class="description">Список операций</div>
+            <div class="description"  transition:slide>Список операций</div>
+            <div class="table_head" transition:slide>
+                <div class="cell cell_money">Сумма</div>
+                <div class="cell cell_account">Название счета</div>
+                <div class="cell cell_comment">Комментарий</div>
+                <div class="cell cell_time">Время операции</div>
+            </div>
             <ul class="money_list">
                 {#each items as operation (operation.id)}
                     <li class="money_item plus" 
                         class:minus={!operation.positiveOperation} 
-                        in:slide out:slide>
+                        transition:slide>
 
-                        <div class="money_item-value">
-                            { operation.operationValue } ({operation.bankAccount})
+                        <div class="cell money_item-value">
+                            { operation.operationValue }
                         </div>
-                        <div class="money_item-comment">{ operation.operationName }</div>
-                        <div class="money_item-time">
-                            <span class="time">{ operation.postTime }</span>
-                            <span class="date">{ operation.postDate }</span>
+                        <div class="cell cell_account">{ operation.bankAccount }</div>
+                        <div class="cell cell_comment">
+                            <span title={ operation.operationName }>{ operation.operationName }</span>    
                         </div>
+                        <div class="cell cell_time">{ operation.postTime } { operation.postDate }</div>
                         <button class="remove_item"
                             on:click={ removeItem(operation.id) }><i class="material-icons">close</i></button>
 
@@ -135,7 +141,7 @@
                                 <textarea 
                                     bind:value={operation.operationName}></textarea>
                                 <BankAccountSelect bind:selectValue={ operation.bankAccount } />
-                                <input type="date" value={operation.postDate}>
+                                <input type="date" bind:value={operation.postDate}>
                                 <button type="submit" on:click={
                                     editItem(
                                         operation.id, 
@@ -157,10 +163,28 @@
 </div>
 
 <style lang="scss">
-    .money_item-time {
-        color: #a3a3a3;
-        .time {
-            margin-right: 10px;
+    .table_head {
+        display: flex;
+        color: #fff;
+        font-weight: bold;
+        margin-bottom: 15px;
+        padding-right: 45px;
+    }
+
+    .cell {
+        flex: 1;
+        text-align: center;
+        color: #fff;
+        text-align: center;
+    }
+
+    .cell_comment {
+        overflow: hidden;
+        span {
+            display: inline-block;
+            max-width: 100%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     }
 
@@ -328,10 +352,11 @@
     }
 
     .money_item {
-        padding: 10px 10px 10px 25px;
+        padding: 10px 45px 10px 0;
         margin-bottom: 15px;
         position: relative;
-
+        display: flex;
+        flex-wrap: wrap;
         &:before {
             content: '';
             position: absolute;
@@ -353,19 +378,6 @@
             }
         }
     }
-
-    .money_item-value {
-        font-size: 22px;
-        font-weight: bold;
-        margin-bottom: 10px;
-        color: #ffffff;
-    }
-
-    .money_item-comment {
-        font-style: italic;
-        font-size: 14px;
-        color: #a3a3a3;
-    }
     
     .description{
         color: gray;
@@ -382,7 +394,7 @@
         z-index: 2;
         background-color: transparent;
         color: #a3a3a3;
-        top: 0; right: 0px;
+        top: -2px; right: -20px;
         border: 0;
         outline: 0;
         cursor: pointer;
@@ -399,7 +411,7 @@
         z-index: 2;
         background-color: transparent;
         color: #a3a3a3;
-        top: 0; right: 40px;
+        top: -2px; right: 5px;
         border: 0;
         outline: 0;
         cursor: pointer;
